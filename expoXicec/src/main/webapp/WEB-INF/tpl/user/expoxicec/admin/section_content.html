@@ -1,0 +1,95 @@
+<section class="sidebar">
+    <!--<ul id="sidebar_menu_ul" class="sidebar-menu">
+    </ul>-->
+    <ul class="sidebar-menu">
+        <li class="header">${tFairInfo.fair_name}</li>
+        <li class=""><a href="${base}/user/admin/project/details?fairid=fairid-${tFairInfo.id}"><i class="fa fa-home"></i> <span>首页</span></a></li>
+        <li class="treeview active">
+            <a href="#"><i class="fa fa-gears"></i> <span>项目设置</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+                <li class="active"><a href="${base}/user/admin/project/set"><i class="fa fa-gear"></i>项目设置</a></li>
+                <li class=""><a href="${base}/user/admin/exhibition/set"><i class="fa fa-gear"></i>展位设置</a></li>
+            </ul>
+        </li>
+
+        <li class=""><a href="${base}/user/admin/exhibition/list"><i class="fa fa-list"></i> <span>展位信息</span></a></li>
+        <li class=""><a href="${base}/user/admin/exhibition/audit/list/info"><i class="fa fa-check-square-o"></i> <span>资料审核</span></a></li>
+        <li class=""><a href="${base}/user/admin/fair/user/list"><i class="fa fa-users"></i> <span>申报用户</span></a></li>
+        <li class=""><a href=""><i class="fa fa-envelope"></i> <span>短信通知</span></a></li>
+        <li><a href="${base}/user/admin/redirectUserBoothSetupByFairType?fairId=${tFairInfo.id}-${tFairInfo.id}" target="_blank"><i class="fa fa-internet-explorer"></i> <span>用户界面</span></a></li>
+    </ul>
+</section>
+
+<script>
+    /*$(document).ready(function () {
+        //获取到Ul列表
+        var ul = document.getElementById("sidebar_menu_ul");
+        //创建元素Li
+        var li = document.createElement("li");
+        li.setAttribute("class", "header");
+        li.innerHTML = '${tFairInfo.fair_name}';
+        //向ul追加元素li
+        ul.appendChild(li);
+
+        li = document.createElement("li");
+        li.innerHTML = "<a href='${base}/user/admin/project/details?fairid=fairid-${tFairInfo.id}'><i class='fa fa-home'></i> <span>首页</span></a>";
+        li.onclick = function(){
+            //将节点设置为激活状态
+            li.className="active";
+        };
+        ul.appendChild(li);
+
+        var litree = document.createElement("li");
+        litree.setAttribute("class", "treeview");
+        litree.innerHTML = "<a href='#'><i class='fa fa-gears'></i> <span>项目设置</span> <i class='fa fa-angle-left pull-right'></i></a>" +
+            "<ul class='treeview-menu menu-open'>" +
+            "<li class='active'><a href='${base}/user/admin/project/set'><i class='fa fa-gear'></i>项目设置</a></li>" +
+            "<li class=''><a href=''><i class='fa fa-gear'></i>展位设置</a></li>" +
+            "</ul>";
+        litree.onclick = function(){
+            //将节点设置为激活状态
+            litree.className="treeview active";
+        };
+        ul.appendChild(litree);
+
+        var li = document.createElement("li");
+        li.innerHTML = "<a href=''><i class='fa fa-list'></i> <span>展位信息</span></a>";
+        li.onclick = function(){
+            //将节点设置为激活状态
+            li.className="active";
+        };
+        ul.appendChild(li);
+
+        var li = document.createElement("li");
+        li.innerHTML = "<a href=''><i class='fa fa-check-square-o'></i> <span>资料审核</span></a>";
+        li.onclick = function(){
+            //将节点设置为激活状态
+            li.className="active";
+        };
+        ul.appendChild(li);
+
+        var li = document.createElement("li");
+        li.innerHTML = "<a href='${base}/user/admin/fair/user/list'><i class='fa fa-users'></i> <span>申报用户</span></a>";
+        li.onclick = function(){
+            //将节点设置为激活状态
+            li.className="active";
+        };
+        ul.appendChild(li);
+
+        var li = document.createElement("li");
+        li.innerHTML = "<a href=''><i class='fa fa-envelope'></i> <span>短信通知</span></a>";
+        li.onclick = function(){
+            //将节点设置为激活状态
+            li.className="active";
+        };
+        ul.appendChild(li);
+
+        var li = document.createElement("li");
+        li.innerHTML = "<a href='' target='_blank'><i class='fa fa-internet-explorer'></i> <span>用户界面</span></a>";
+        li.onclick = function(){
+            //将节点设置为激活状态
+            li.className="active";
+        };
+        ul.appendChild(li);
+    });*/
+</script>

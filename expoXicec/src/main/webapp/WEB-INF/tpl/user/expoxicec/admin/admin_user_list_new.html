@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>中国·厦门会展金泓信展览</title>
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/_all_skin.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/AdminLTE.min.css">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/Site.css">
+
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="${base}/resource/expoxicec/admin/html5shiv.min.js"></script>
+    <script type="text/javascript" src="${base}/resource/expoxicec/admin/respond.min.js"></script>
+    <![endif]-->
+    <!--统计-->
+
+    <script src="${base}/resource/expoxicec/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/admin/app.min.js" type="text/javascript"></script>
+</head>
+
+<body class="skin-blue sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="${base}/user/admin/projectlist"><i class="fa fa-home"></i> 项目列表</a></li>
+                <li><a href="${base}/user/admin/userlist"><i class="fa fa-users"></i> 用户管理</a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper" style="min-height: 921px;">
+        <section class="content-header">
+            <h1>项目<small></small></h1>
+        </section>
+
+        <section class="content">
+            <link href="${base}/resource/expoxicec/css/StepWizard.css" rel="stylesheet"/>
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">项目列表</h3>
+                    <div class="box-tools pull-left"><a href="${base}/user/admin/admin_new_user" class="btn btn-sm btn-primary">创建用户</a></div>
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="dg" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true" url="../queryUserListByPage.htm" fit="true" toolbar="#tb">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'ck',checkbox:true"></th>
+                                <th data-options="fidel:'id',hidden:'true'">
+                                <th data-options="field:'mobilephone',width:80" align="center">手机</th>
+                                <th field="status" width="60" align="center">状态</th>
+                                <th field="username" width="60" align="center">姓名</th>
+                                <th field="email" width="60" align="center">Email</th>
+                                <th field="company" width="60" align="center">公司</th>
+                                <th field="vip" width="60" align="center">VIP</th>
+                                <th field="create_Time" width="60" align="center">创建时间</th>
+                                <th field="register_type" width="60" align="center">注册方式</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#resetpassword").click(function () {
+            location.href = "${resource}/expoxicechtml/modifyPassword.html";
+        });
+    });
+
+    var jschars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+    function generateMixed(n) {
+        var res = "";
+        for(var i = 0; i < n ; i ++) {
+            var id = Math.ceil(Math.random()*35);
+            res += jschars[id];
+        }
+        return res;
+    }
+</script>
+</body>
+</html>

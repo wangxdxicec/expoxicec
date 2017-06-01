@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        .infoBox{
+            background:#f5f5f5;
+            width:100%;
+            padding:20px 0;
+            box-sizing:border-box;
+
+        }
+        #tab_header_ul>li{
+            float: left;
+            padding: 7px 15px;
+            cursor: pointer;
+        }
+        #tab_header_ul>li:hover{
+            background-color:#888;color:#fff;
+        }
+
+        #tab_header_ul>li a{text-decoration:none; color:#000}
+        #tab_header_ul>li.cur a{ color:#fff}
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/reset.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/default.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/jquery.filer.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/jquery.filer-dragdropbox-theme.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/tomorrow.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/custom.css">
+    <link href="${resource}/expoxicec/common.css" rel="stylesheet">
+</head>
+
+<body>
+<!--<#include "/user/expoxicec/head.html" />-->
+
+<div class = "infoBox" id = "tab_header">
+    <ul id = "tab_header_ul" style="overflow: hidden">
+    </ul>
+</div>
+
+<table border="0" rules="rows" cellspacing="1" cellpadding="1">
+    <tr>
+        <td id="booth_number_value" name="booth_number_value"></td>
+    </tr>
+    <tr>
+        <td id="booth_name" name="booth_name" style="font-size: 16px;font-weight: bold">展位名称：</td>
+        <td id="booth_name_value" name="booth_name_value"></td>
+    </tr>
+    <tr>
+        <td id="booth_type" name="booth_type" style="font-size: 16px;font-weight: bold">展位类型：</td>
+        <td id="booth_type_value" name="booth_type_value"></td>
+    </tr>
+    <tr>
+        <td id="contact" name="contact" style="font-size: 16px;font-weight: bold">联系人：</td>
+        <td id="contact_value" name="contact_value"></td>
+    </tr>
+</table>
+<!--<#include "/user/expoxicec/bottom.html" />-->
+
+<div class="pre-box collapsed">
+    <pre class="prettyprint lang-js"></pre>
+</div>
+
+</body>
+<script>
+    var expoBuildInfoList;
+    $(document).ready(function () {
+        $.ajax({
+            url: "${base}/user/getBoothList",
+            type: "post",
+            dataType: "json",
+            success: function (e) {
+                if(e.tExpoBuildInfoList != null){
+                    expoBuildInfoList = JSON.parse(e.tExpoBuildInfoList);
+                    //获取到Ul列表
+                    var ul = document.getElementById("tab_header_ul");
+                    for(var i=0;i<expoBuildInfoList.length;i++){
+                        //创建元素Li
+                        var li = document.createElement("li");
+                        if(i == 0){
+                            $(this).addClass("active");
+                            document.getElementById("booth_number_value").innerHTML = expoBuildInfoList[0].booth_Number;
+                            document.getElementById("booth_name_value").innerHTML = expoBuildInfoList[0].exhibitor_Company;
+                            document.getElementById("booth_type_value").innerHTML = expoBuildInfoList[0].exhibitor_Type;
+                            document.getElementById("contact_value").innerHTML = expoBuildInfoList[0].login_name + "【" + expoBuildInfoList[0].login_telphone + "】";
+                        }else{
+                            $('.active').removeClass('active');
+                        }
+                        li.id = i;
+                        //向li中添加内容
+                        li.innerHTML = expoBuildInfoList[i].booth_Number;
+
+                        li.onclick = function(){
+                            //将节点设置为激活状态
+                            $(this).addClass("active");
+                            var id_value = $(this).attr("id");
+                            document.getElementById("booth_number_value").innerHTML = expoBuildInfoList[id_value].booth_Number;
+                            document.getElementById("booth_name_value").innerHTML = expoBuildInfoList[id_value].exhibitor_Company;
+                            document.getElementById("booth_type_value").innerHTML = expoBuildInfoList[id_value].exhibitor_Type;
+                            document.getElementById("contact_value").innerHTML = expoBuildInfoList[id_value].login_name + "【" + expoBuildInfoList[id_value].login_telphone + "】";
+                        }
+
+                        //向ul追加元素li
+                        ul.appendChild(li);
+                    }
+                    var addBooth = document.createElement("a");
+                    addBooth.innerHTML = "+添加展位";
+                    addBooth.href = "${base}/user/boothempty.html";
+                    ul.appendChild(addBooth);
+                }
+            }
+        });
+
+        $('#nky li').click(function (){
+            //把之前已有的active去掉
+            $('.active').removeClass('active');
+            //当前点击的li加上class
+            $(this).addClass("active");
+        });
+    });
+</script>
+
+<script src="${base}/resource/expoxicec/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="${base}/resource/expoxicec/bootstrap.min.js" type="text/javascript"></script>
+<script src="${base}/resource/expoxicec/jquery.filer.min.js" type="text/javascript"></script>
+<script src="${base}/resource/expoxicec/prettify.js" type="text/javascript"></script>
+<script src="${base}/resource/expoxicec/scripts.js" type="text/javascript"></script>
+<script src="${base}/resource/expoxicec/custom.js" type="text/javascript"></script>
+<script src="${base}/resource/common/jquery.min.js"></script>
+<script src="${resource}/js/jquery.json-2.4.js"></script>
+</html>

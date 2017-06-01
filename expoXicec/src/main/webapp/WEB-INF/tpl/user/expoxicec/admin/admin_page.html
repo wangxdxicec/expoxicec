@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <title>金泓信展商管理后台</title>
+    <script src="${base}/resource/expoxicec/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/admin/jquery.pagination2.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/admin/pagination1.css">
+</head>
+
+<body>
+<div class="nav-box">
+    <ul class="pagination" id="p3"></ul>
+</div>
+</body>
+
+<script>
+    $(function () {
+        $("#box").pagination({
+            total: 30, //数据总条数
+            pageSize: 10,//页大小，即每页显示多少条数据
+            pageNumber: 1,//当前页
+            pageList: [5, 10, 15, 20], //5表示页显示5条数据。10条是每页显示10条数据  15表示每页显示15条数据，20表示每页显示20条数据
+
+            //用户选择一个新的页面的时候触发此事件，可以传递2个惨（pageNumber, pageSize）分别表示当前页，和页大小
+            onSelectPage: function (pageNumber, pageSize) {
+                $.ajax({
+                    url: "${base}/user/queryUserListByPage?pageIndex="+pageNumber,
+                    success: function (data) {
+                        $("#content").empty();
+                        var array = data.rows;
+                        //totalSize = data.total;
+                        for(var i=0;i<array.length;i++){
+                            var info=array[i];
+                            if(info != null){
+                                $("#content").append("<tr><td>" + info.mobilephone + "</td><td>" + info.status + "</td><td>" + info.username +
+                                    "</td><td>" + info.email + "</td><td>" + info.company + "</td><td>" + info.vip + "</td><td>" + info.create_Time +
+                                    "</td><td>" + info.register_type + "</td></tr>");
+                            }
+                        }
+                    }
+                })
+            }
+        })
+
+    });
+</script>

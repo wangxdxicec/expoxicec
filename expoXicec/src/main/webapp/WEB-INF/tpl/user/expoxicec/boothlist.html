@@ -1,0 +1,863 @@
+﻿<!doctype html>
+<html>
+<head>
+    <style>
+        .infoBox{
+            background:#f5f5f5;
+            width:100%;
+            padding:00px 0;
+            box-sizing:border-box;
+
+        }
+        #tab_header_ul{
+            overflow:hidden;
+            float:left;
+            width:100%;
+        }
+        #tab_header_ul>li{
+            float:left;
+        }
+       #addBoothHref>a{
+           color:red;
+           font-weight: bold;
+       }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国·厦门会展金泓信展览</title>
+
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/_all_skin.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/AdminLTE.min.css">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/Site.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/StepWizard.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/jquery.webui-popover.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/jquery.pagewalkthrough.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/bootstrap-tokenfield.min.css">
+
+    <script type="text/javascript" src="${base}/resource/expoxicec/date.format.js"></script>
+    <script type="text/javascript" src="${base}/resource/js/jquery-1.12.4.js"></script>
+    <script src="${base}/resource/expoxicec/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/jquery.filer.min.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/prettify.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/scripts.js" type="text/javascript"></script>
+
+    <!--<script src="${base}/resource/expoxicec/js/browserIe.js" type="text/javascript"></script>-->
+    <!--<script src="${base}/resource/expoxicec/js/hm.js" type="text/javascript"></script>-->
+    <script src="${base}/resource/expoxicec/js/adminlte.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/jquery-form.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/html5ImgCompress.min.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/bootstrap-tokenfiled.js" type="text/javascript"></script>
+    <!--<script src="${base}/resource/expoxicec/js/jquery-form1.js" type="text/javascript"></script>-->
+    <script src="${base}/resource/expoxicec/js/jquery-pagewalkthrough.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/jquery-webui-popover.js" type="text/javascript"></script>
+    <script type="text/javascript" src="${base}/resource/expoxicec/js/ajaxfileupload.js"></script>
+    <script type="text/javascript" src="${base}/resource/js/common.js"></script>
+</head>
+<#include "/user/expoxicec/head.html" />
+
+<body class="skin-black layout-top-nav">
+<div class="skin-black layout-top-nav">
+<!-- 展会公告 -->
+<div class="modal fade" id="modalNotice">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">展会公告</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnConfirmNotice">不再显示</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="usermobile" value="14759166808"/>
+<input type="hidden" id="projectId" value="ffa63cc9-74b7-e611-9692-000c2985450b"/>
+
+<div class="container">
+    <#include "/common/message.ftl" />
+    <div id="myBooths" style="width:100%!important;">
+        <div class="nav-tabs-custom" style="width:100%!important;">
+            <ul id="tab_header_ul" class="nav nav-tabs"></ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_booth_info" data-boothid="">
+                    <div class="clearfix">
+                        <div class="pull-left" style="width:100%;overflow:hidden;">
+                            <p class="h4 margin-bottom" style="word-wrap: break-word;text-wrap:normal; width:100%">
+                                <label id="booth_number_value" name="booth_number_value"></label>
+                                <small>
+                                    <span class="boothstatus label label-default" name="booth_current_status" id="booth_current_status"></span>
+                                    <input type="hidden" class="lastAuditTime" name="booth_modify_time" id="booth_modify_time"/>
+                                </small>
+                            </p>
+                            <p class="h5"><strong>展位名称 </strong><label id="booth_name_value" name="booth_name_value"></label></p>
+                            <p class="h5"><strong>展位类型 </strong><label id="booth_type_value" name="booth_type_value"></label></p>
+                            <p class="h5"><strong>联系人 </strong><label id="contact_value" name="contact_value"></label>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="stepwizard">
+                                <ul class="stepwizard-row" id="current_step_image">
+
+                                </ul>
+                            </div>
+                            <div class="box-group" id="accordionBoothTemplate">
+                            </div>
+                        </div>
+                        <div class="col-md-4 timelinepanel">
+                            <button class="btn btn-primary btn-block btn-lg" name="booth_current_status_btn" id="booth_current_status_btn"
+                                    data-toggle="modal" data-target="#confirm_dialog">
+                                <i class="fa fa-upload"></i>&nbsp;提交审核
+                            </button>
+                            <div class="modal fade" tabindex="-1" id="confirm_dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">提交审核</div>
+                                        <div class="modal-body" style="word-break:break-word" id="submitBtnValue" name="submitBtnValue">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form action="${base}/user/submitAllBoothInfo" method="post">
+                                                <input type="hidden" name="BoothId" id="boothIdValue8"/>
+                                                <input type="hidden" name="returnUrl" value="#"/>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                                <button type="submit" class="btn btn-primary">提交审核</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <ul class="timeline" style="margin-right:-15px;" id="booth_review_result" name="booth_review_result">
+                            </ul>
+
+                            <p class="text-center">
+                                <button class="btn btn-default btn-showremovebooth" title="删除此展位" data-toggle="modal" data-target="#modalDeleteBooth_dialog">
+                                    <i class="fa fa-trash-o"></i> 删除此展位
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 删除展位 -->
+                <div class="modal modal-danger fade" id="modalDeleteBooth_dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title">删除展位</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>确定要删除展位 <strong style="word-wrap: break-word" id="delBtnValue" name="delBtnValue"></strong> ？</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form action="${base}/user/deleteAllBoothInfo" method="post" >
+                                    <input type="hidden" name="BoothId" id="boothIdValue9"/>
+                                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">取消</button>
+                                    <button type="submit" class="btn btn-outline" name="confirmDeleteAllBoothInfo" id="confirmDeleteAllBoothInfo">确定删除</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="checkbox"><label><input type="checkbox" id="doNotCompress" />使用原图上传</label></div>-->
+</div>
+<#include "/user/expoxicec/bottom.html" />
+</div>
+
+</body>
+<!-- 预览 -->
+<div class="modal fade" id="modalPreview">
+    <div class="modal-dialog modal-dialog-preview">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div class="modal-body"><img id="imgPreview" src="" style="width:100%"/></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 图片模板 -->
+<script type="text/template" id="template_loading">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 loading-template">
+        <div class="document-item">
+            <div class="document-thumb"></div>
+            <div class="document-control text-center">请稍后</div>
+            <button class="btn btn-default btn-xs btn-delete-document deleteHide" data-imagename="" data-tempid="" data-boothid="">
+                <i class="fa fa-trash fa-2x"></i>
+            </button>
+            <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
+        </div>
+    </div>
+</script>
+<div class="upload-success-notify" style="display:none"><i class="fa fa-check"></i>&nbsp;上传成功</div>
+
+<!--引导说明-->
+<div style="display:none" id="userGuide">
+    <div id="userGuideStep1"><h3 class="margin-bottom">根据组委会要求上传您的展位应提交的文件</h3></div>
+    <div id="userGuideStep2"><h3>您可以添加多个展位</h3></div>
+    <div id="userGuideStep3"><h3>等待管理员审核您的资料</h3></div>
+    <div id="userGuideStep4"><h3>查看组委会公告</h3></div>
+</div>
+
+<script>
+    var expoBuildTemplateInfoList;
+    var expoBuildInfoList;
+    var curBoothIdValue;
+    var boothSetUpAddFlag;
+    $(document).ready(function () {
+        $.ajax({
+            url: "${base}/user/getBoothList",
+            type: "post",
+            dataType: "json",
+            success: function (e) {
+                if(e.tExpoBuildInfoList != null){
+                    expoBuildInfoList = JSON.parse(e.tExpoBuildInfoList);
+                    //获取到Ul列表
+                    var ul = document.getElementById("tab_header_ul");
+                    var cur
+                    for(var k=0;k<expoBuildInfoList.length;k++){
+                        //创建元素Li
+                        var li = document.createElement("li");
+                        li.setAttribute("role", "presentation");
+                        //将节点设置为激活状态
+                        if(k == 0) {
+                            li.className="active";
+                            curBoothIdValue = expoBuildInfoList[k].booth_Number;
+                            boothSetUpAddFlag = expoBuildInfoList[k].fair_enable;
+                            document.getElementById("submitBtnValue").innerHTML = "将上传的 " + expoBuildInfoList[0].booth_Number + "相关资料提交审核？一旦提交，在得到审核结果之前无法再添加信息!";
+                            document.getElementById("delBtnValue").innerHTML = expoBuildInfoList[0].booth_Number;
+
+                            $.ajax({
+                                url: "${base}/user/getBoothTemplate",
+                                type: "post",
+                                dataType: "json",
+                                success: function (e) {
+                                    if(e.tExpoBuildTemplateInfoList != null){
+                                        expoBuildTemplateInfoList = JSON.parse(e.tExpoBuildTemplateInfoList);
+                                        buildBoothTemplatePage(0, expoBuildTemplateInfoList);
+                                    }
+                                }
+                            });
+
+                            document.getElementById("boothIdValue8").value = expoBuildInfoList[0].booth_Number;
+                            document.getElementById("boothIdValue9").value = expoBuildInfoList[0].booth_Number;
+                            document.getElementById("booth_number_value").innerHTML = expoBuildInfoList[0].booth_Number;
+                            document.getElementById("booth_current_status").innerHTML = expoBuildInfoList[0].current_Audit_Status;
+                            if(1 == boothSetUpAddFlag){
+                                document.getElementById("booth_current_status_btn").setAttribute("class","btn btn-primary btn-block btn-lg");
+                                document.getElementById("booth_current_status_btn").innerHTML = expoBuildInfoList[0].current_Audit_Status_Button;
+                            }else{
+                                document.getElementById("booth_current_status_btn").setAttribute("class","disabled btn btn-block btn-lg btn-warning");
+                                document.getElementById("booth_current_status_btn").innerHTML = "搭建资料报审已停止";
+                            }
+
+                            loadReviewBoothResult(expoBuildInfoList[0].current_Status, JSON.parse(expoBuildInfoList[0].current_Review_Info));
+
+                            document.getElementById("booth_name_value").innerHTML = expoBuildInfoList[0].exhibitor_Company;
+                            document.getElementById("booth_type_value").innerHTML = expoBuildInfoList[0].exhibitor_Type;
+                            document.getElementById("contact_value").innerHTML = expoBuildInfoList[0].login_name + "【" + expoBuildInfoList[0].login_telphone + "】";
+                        }
+
+                        li.id = k;
+                        //向li中添加内容
+                        li.innerHTML = "<a href='#detail_info_dragdrop' role='tab' data-toggle='tab'>" + expoBuildInfoList[k].booth_Number + "</a>";
+
+                        li.onclick = function(){
+                            var fair_info_data_body = document.getElementById("accordionBoothTemplate");
+                            fair_info_data_body.innerHTML="";
+                            //将节点设置为激活状态
+                            //li.className="active";
+                            var id_value = $(this).attr("id");
+                            $("#detail_info_dragdrop").show();
+                            curBoothIdValue = expoBuildInfoList[id_value].booth_Number;
+                            document.getElementById("submitBtnValue").innerHTML = "将上传的 " + expoBuildInfoList[id_value].booth_Number + "相关资料提交审核？";
+                            document.getElementById("delBtnValue").innerHTML = expoBuildInfoList[id_value].booth_Number;
+                            $.ajax({
+                                url: "${base}/user/getBoothTemplate",
+                                type: "post",
+                                dataType: "json",
+                                success: function (e) {
+                                    if(e.tExpoBuildTemplateInfoList != null){
+                                        expoBuildTemplateInfoList = JSON.parse(e.tExpoBuildTemplateInfoList);
+                                        buildBoothTemplatePage(id_value, expoBuildTemplateInfoList);
+                                    }
+                                }
+                            });
+                            document.getElementById("boothIdValue8").value = expoBuildInfoList[id_value].booth_Number;
+                            document.getElementById("boothIdValue9").value = expoBuildInfoList[id_value].booth_Number;
+                            document.getElementById("booth_number_value").innerHTML = expoBuildInfoList[id_value].booth_Number;
+                            document.getElementById("booth_current_status").innerHTML = expoBuildInfoList[id_value].current_Audit_Status;
+                            if(1 == boothSetUpAddFlag){
+                                document.getElementById("booth_current_status_btn").setAttribute("class","btn btn-primary btn-block btn-lg");
+                                document.getElementById("booth_current_status_btn").innerHTML = expoBuildInfoList[id_value].current_Audit_Status_Button;
+                            }else{
+                                document.getElementById("booth_current_status_btn").setAttribute("class","disabled btn btn-block btn-lg btn-warning");
+                                document.getElementById("booth_current_status_btn").innerHTML = "搭建资料报审已停止";
+                            }
+                            loadReviewBoothResult(expoBuildInfoList[id_value].current_Status, JSON.parse(expoBuildInfoList[id_value].current_Review_Info));
+
+                            document.getElementById("booth_name_value").innerHTML = expoBuildInfoList[id_value].exhibitor_Company;
+                            document.getElementById("booth_type_value").innerHTML = expoBuildInfoList[id_value].exhibitor_Type;
+                            document.getElementById("contact_value").innerHTML = expoBuildInfoList[id_value].login_name + "【" + expoBuildInfoList[id_value].login_telphone + "】";
+                        };
+                        //向ul追加元素li
+                        ul.appendChild(li);
+                    }
+                    var liAddbooth= document.createElement("li");
+                    if(1 == boothSetUpAddFlag){
+                        var addBooth = document.createElement("a");
+                        addBooth.innerHTML = "+添加展位";
+                        addBooth.href = "${base}/user/boothempty.html";
+                        liAddbooth.setAttribute("id","addBoothHref");
+                        liAddbooth.appendChild(addBooth);
+                    }
+                    ul.appendChild(liAddbooth);
+
+                    var projectstat = parseInt(boothSetUpAddFlag) == 0 ? true : false;
+                    if (projectstat) {
+                        $('#btnShowCreateBooth').remove();
+                        $('.btn-showremovebooth').remove();
+                        $('.form-upload').parent().remove();
+                        $('.btn-delete-document').remove();
+                    }
+                }
+            }
+        });
+
+        function buildBoothTemplatePage(templateIndex, expoBuildTemplateInfoList) {
+            var fair_info_data_body = document.getElementById("accordionBoothTemplate");
+            fair_info_data_body.innerHTML="";
+            for(var i=0;i<expoBuildTemplateInfoList.length;i++){
+                var panel_documenttype = document.createElement('div');
+                var generateCharacter = generateMixed(16);
+                var requireCharacter = "";
+                if(1 == expoBuildTemplateInfoList[i].document_Require){
+                    requireCharacter = "<small><span class='label label-default'>必选</span></small>";
+                }else {
+                    requireCharacter = "";
+                }
+
+                var downloadCharacter = "";
+                if(expoBuildTemplateInfoList[i].document_Template != ""){
+                    /*var extStart = expoBuildTemplateInfoList[i].document_Template.lastIndexOf(".");
+                    var ext = expoBuildTemplateInfoList[i].document_Template.substring(extStart,expoBuildTemplateInfoList[i].document_Template.length).toUpperCase();
+                    if(ext!=".BMP" && ext!=".PNG" && ext!=".GIF" && ext!=".JPG" && ext!=".JPEG"){
+                        downloadCharacter = "<a href='file://" + expoBuildTemplateInfoList[i].document_Template + "' title='下载" + expoBuildTemplateInfoList[i].document_Name + "模版' style='margin-left:1em;' target='_blank'><i class='fa fa-download'></i> 下载模版</a>";
+                    }else{
+                        downloadCharacter = "<a href='${base}/user/showExhibitionTemplate?fileTemplate=" + expoBuildTemplateInfoList[i].document_Template + "' title='下载" + expoBuildTemplateInfoList[i].document_Name + "模版' style='margin-left:1em;' target='_blank'><i class='fa fa-download'></i> 下载模版</a>";
+                    }*/
+                    downloadCharacter = "<a href='${base}/user/showExhibitionTemplate?templateID=" + generateMixed(16) + "-" + expoBuildTemplateInfoList[i].id
+                        + "' title='下载" + expoBuildTemplateInfoList[i].document_Name + "模版' style='margin-left:1em;' target='_blank'><i class='fa fa-download'></i> 下载模版</a>";
+                }
+                var collapseclass = "";
+                if(i == 0){
+                    collapseclass = " class='panel-collapse collapse in' aria-expanded='false' ";
+                }else{
+                    collapseclass = " class='panel-collapse collapse' style='height: 0px;' ";
+                }
+                panel_documenttype.setAttribute("class", "panel box box-primary panel-documenttype" + expoBuildTemplateInfoList[i].id);
+                panel_documenttype.innerHTML = "<div class='box-header with-border'><h4 class='box-title'>" +
+                    "<a data-toggle='collapse' data-parent='#accordionBoothTemplate' href='#collapse" + generateCharacter + "'" + " class='collapsed pull-left'>"
+                    + expoBuildTemplateInfoList[i].document_Name + requireCharacter + "</a></h4><div class='pull-right'>" + downloadCharacter + "<span class='badge bg-gray badge-documentcount" +expoBuildTemplateInfoList[i].id + "' title='"
+                    + expoBuildTemplateInfoList[i].document_Name + "'></span></div></div><div id='collapse" + generateCharacter
+                    + "' " + collapseclass + "><div class='box-body clearfix'><p class='margin-bottom h5'>"
+                    + expoBuildTemplateInfoList[i].document_Remark + "</p><div class='row' id='group_" + expoBuildTemplateInfoList[i].id + "'><div class='col-lg-3 col-md-4 col-sm-6 col-xs-6'>" +
+                    "<form action='${base}/user/uploadImage' class='form-upload' name='uploadImageForm" + expoBuildTemplateInfoList[i].id + "' id='uploadImageForm" + expoBuildTemplateInfoList[i].id + "' enctype='multipart/form-data' method='post'>" +
+                    "<input type='hidden' name='type' value='" + expoBuildTemplateInfoList[i].document_Name + "'/><input type='hidden' name='BoothId' id='boothIdValue' value='" + expoBuildInfoList[templateIndex].booth_Number + "'/>" +
+                    "<input type='hidden' name='tempId' value='" + expoBuildTemplateInfoList[i].id + "'/><div class='document-item btn-adddocument' title='" +
+                    expoBuildTemplateInfoList[i].document_Name + "'><i class='fa fa-plus fa-2x'></i><div class='filerequire'>"
+                    + "请上传小于" + expoBuildTemplateInfoList[i].document_Size + "M 的 " + expoBuildTemplateInfoList[i].document_Type + " 文件</div>" +
+                    "<input type='file' class='hidden-fileinput' name='fileUpload' id='fileUpload" + expoBuildTemplateInfoList[i].id + "' accept='" + expoBuildTemplateInfoList[i].document_Type + "'/></div></form></div></div></div></div></div>";
+
+                fair_info_data_body.appendChild(panel_documenttype);
+                $("input[id='fileUpload" + expoBuildTemplateInfoList[i].id + "']").on('change', function (e) {
+                    var form = $(this).parents('form');
+                    var loadingHtml = $('#template_loading').html();
+                    $(this).parents('form').parent().before(loadingHtml);
+                    form.submit();
+                    updateBoothStatus($(this));
+                    $(this).val('');
+                });
+
+                // 原图上传
+                $('.form-upload').ajaxForm({
+                    complete: function (xhr) {
+                        var data = JSON.parse(xhr.responseText);
+                        showNewImage(data);
+                        showSuccessNotify();
+                    }
+                });
+                loadImageByCurrentBoothIdAndTempId(expoBuildTemplateInfoList[i].id);
+            }
+        }
+
+        function loadReviewBoothResult(curReviewStatus, curReviewInfo){
+            var stepUl = document.getElementById("current_step_image");
+            stepUl.innerHTML = "";
+            if(1 == curReviewStatus){
+                $('.hidden-fileinput').parent().show();
+
+                var stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step active");
+                stepli.innerHTML = "<a><i class='fa fa-upload'></i></a><p>上传资料<br/>预订展具</p>";
+                stepUl.appendChild(stepli);
+                stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step");
+                stepli.innerHTML = "<a><i class='fa fa-hourglass-half'></i></a><p>等待审核</p>";
+                stepUl.appendChild(stepli);
+                stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step");
+                stepli.innerHTML = "<a><i class='fa fa-check'></i></a><p>审核通过</p>";
+                stepUl.appendChild(stepli);
+                document.getElementById("booth_current_status").setAttribute("class","boothstatus label label-default");
+                //document.getElementById("booth_current_status_btn").setAttribute("class","btn btn-primary btn-block btn-lg");
+            }else if(2 == curReviewStatus){
+                $('.hidden-fileinput').parent().show();
+
+                var stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step stepwizard-done");
+                stepli.innerHTML = "<a><i class='fa fa-upload'></i></a><p>上传资料<br/>预订展具</p>";
+                stepUl.appendChild(stepli);
+                stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step active");
+                stepli.innerHTML = "<a><i class='fa fa-hourglass-half'></i></a><p>等待审核</p>";
+                stepUl.appendChild(stepli);
+                stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step");
+                stepli.innerHTML = "<a><i class='fa fa-check'></i></a><p>审核通过</p>";
+                stepUl.appendChild(stepli);
+                document.getElementById("booth_current_status").setAttribute("class","boothstatus label label-info");
+                //document.getElementById("booth_current_status_btn").setAttribute("class","disabled btn btn-block btn-lg btn-default");
+            }else if(3 == curReviewStatus){
+                $('.hidden-fileinput').parent().hide();
+
+                var stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step stepwizard-done");
+                stepli.innerHTML = "<a><i class='fa fa-upload'></i></a><p>上传资料<br/>预订展具</p>";
+                stepUl.appendChild(stepli);
+                stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step stepwizard-done");
+                stepli.innerHTML = "<a><i class='fa fa-hourglass-half'></i></a><p>等待审核</p>";
+                stepUl.appendChild(stepli);
+                stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step active stepwizard-step-success");
+                stepli.innerHTML = "<a><i class='fa fa-check'></i></a><p>审核通过</p>";
+                stepUl.appendChild(stepli);
+                document.getElementById("booth_current_status").setAttribute("class","boothstatus label label-success");
+                //document.getElementById("booth_current_status_btn").setAttribute("class","disabled btn btn-block btn-lg btn-success");
+            }else if(4 == curReviewStatus){
+                $('.hidden-fileinput').parent().show();
+
+                var stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step stepwizard-done");
+                stepli.innerHTML = "<a><i class='fa fa-upload'></i></a><p>上传资料<br/>预订展具</p>";
+                stepUl.appendChild(stepli);
+                stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step stepwizard-done");
+                stepli.innerHTML = "<a><i class='fa fa-hourglass-half'></i></a><p>等待审核</p>";
+                stepUl.appendChild(stepli);
+                stepli = document.createElement("li");
+                stepli.setAttribute("class", "stepwizard-step active stepwizard-step-danger");
+                stepli.innerHTML = "<a><i class='fa fa-remove'></i></a><p>审核不通过<br>详见审核信息</p>";
+                stepUl.appendChild(stepli);
+                document.getElementById("booth_current_status").setAttribute("class","boothstatus label label-danger");
+                //document.getElementById("booth_current_status_btn").setAttribute("class","disabled btn btn-block btn-lg btn-danger");
+            }
+            //加载当前展位的审核信息
+            loadCurrentReivewInfo(curReviewInfo);
+        }
+
+        function loadCurrentReivewInfo(curReviewInfo){
+            //当前状态对应的审核结果
+            var reviewReultInfoUl = document.getElementById("booth_review_result");
+            reviewReultInfoUl.innerHTML = "";
+            var reviewli = document.createElement("li");
+            reviewli.setAttribute("class", "time-label");
+            reviewli.innerHTML = "<span class='bg-tangjiuhui' style='font-size:1.2em;font-weight:normal;'>审核信息</span>";
+            reviewReultInfoUl.appendChild(reviewli);
+
+            if(curReviewInfo != null && curReviewInfo.length > 0){
+                for(var index=0,reviewInfo; reviewInfo=curReviewInfo[index++];){
+                    var header = reviewInfo.review_header;
+                    var content = reviewInfo.review_content;
+                    var time = reviewInfo.review_time;
+                    if(index == 1){
+                        reviewli = document.createElement("li");
+                        reviewli.setAttribute("class", "");
+                        reviewli.setAttribute("data-aid", reviewInfo.id);
+                        if(content != null && content != ""){
+                            reviewli.innerHTML = "<i class='fa fa-remove bg-red'></i><div class='timeline-item'><h3 class='timeline-header'>" + header + "</h3><div class='timeline-body'>" + content + "<div class='timeline-footer text-right'><span class='time'><i class='fa fa-clock-o'></i>" + time + "</span></div></div>";
+                        }else{
+                            reviewli.innerHTML = "<i class='fa fa-check bg-green'></i><div class='timeline-item'><h3 class='timeline-header'>" + header + "</h3>" + "<div class='timeline-footer text-right'><span class='time'><i class='fa fa-clock-o'></i>" + time + "</span></div></div>";
+                        }
+                        reviewReultInfoUl.appendChild(reviewli);
+                    }else{
+                        reviewli = document.createElement("li");
+                        reviewli.setAttribute("class", "audithistory");
+                        reviewli.setAttribute("data-aid", reviewInfo.id);
+                        if(content != null && content != ""){
+                            reviewli.innerHTML = "<i class='fa fa-remove bg-red'></i><div class='timeline-item'><h3 class='timeline-header'>" + header + "</h3><div class='timeline-body'>" + content + "<div class='timeline-footer text-right'><span class='time'><i class='fa fa-clock-o'></i>" + time + "</span></div></div>";
+                        }else{
+                            reviewli.innerHTML = "<i class='fa fa-check bg-green'></i><div class='timeline-item'><h3 class='timeline-header'>" + header + "</h3>" + "<div class='timeline-footer text-right'><span class='time'><i class='fa fa-clock-o'></i>" + time + "</span></div></div>";
+                        }
+                        reviewReultInfoUl.appendChild(reviewli);
+                    }
+                }
+                if(curReviewInfo != null && curReviewInfo.length > 1){
+                    reviewli = document.createElement("li");
+                    reviewli.setAttribute("class", "time-label");
+                    reviewli.innerHTML = "<span class='bg-gray btn-toggle-history' id = 'toggle-history-btn' name = 'toggle-history-btn' style='font-weight: normal;'>查看历史审核信息</span>";
+                    reviewReultInfoUl.appendChild(reviewli);
+
+                    var toggleHistoryBtn = document.getElementById("toggle-history-btn");
+                    toggleHistoryBtn.onclick = function () {
+                        $(this).hide().parents('ul').find('.audithistory').slideDown();
+                    };
+                }
+            }else{
+                reviewli = document.createElement("li");
+                reviewli.innerHTML = "<i class='fa fa-info bg-gray'></i><div class='timeline-item'><h3 class='timeline-header'>暂无审核信息</h3></div>";
+                reviewReultInfoUl.appendChild(reviewli);
+            }
+
+            reviewli = document.createElement("li");
+            reviewli.innerHTML = "<i class='fa fa-history'></i>";
+            reviewReultInfoUl.appendChild(reviewli);
+        }
+
+        // 显示通知
+        if (parseInt('0') == 1) {
+            $('#modalNotice').modal('show');
+        }
+        // 不再显示通知
+        $('#btnConfirmNotice').click(function () {
+            /*$('#modalNotice').modal('hide');
+            $.ajax({
+                url: '/Project/ConfirmNotice',
+                type: 'POST',
+                data: { ProjectId: 'ffa63cc9-74b7-e611-9692-000c2985450b' }
+            });*/
+        });
+
+        $('.boothstatus').webuiPopover({
+            title: '审核流程',
+            trigger: 'hover',
+            placement: 'right',
+            animation: 'pop',
+            content: '<div class="text-center">上传资料 / 预订展具<br /><i class="fa fa-long-arrow-down"></i><br />等待审核<br /><i class="fa fa-long-arrow-down"></i><br />通过审核<br /><i class="fa fa-long-arrow-down"></i><br />现场布展'
+        });
+
+        // 删除文件
+        function deleteImage(e) {
+            if (confirm("确定删除此文件？")) {
+                var imageName = e.data('imagename');
+                var tempid = e.data('tempid');
+                var boothid = e.data('boothid');
+                console.log('确定删除' + imageName);
+                $.ajax({
+                    url: '${base}/user/deleteImgByImageType',
+                    data: { tempid: tempid, imagename:imageName, boothid:boothid },
+                    type: 'post',
+                    success: function (data) {
+                        if (data.resultCode == 0) {
+                            updateBoothStatus($(e));
+                            e.parents('.document-item').parent().fadeOut(200, function () {
+                                $(this).remove();
+                                updateDocumentCount(tempid);
+                            });
+                        }
+                        else {
+                            alert(data.description);
+                        }
+                    }
+                });
+            }
+        }
+
+        // 选择文件
+        $('.hidden-fileinput').on('change', function (e) {
+            var input = $(this);
+            var form = $(this).parents('form');
+            var loadingHtml = $('#template_loading').html();
+            $(this).parents('form').parent().before(loadingHtml);
+            //console.log(e.target.files[0]);
+            var file = e.target.files[0];
+            var filename = file.name;
+            var ext = filename.split('.')[filename.split('.').length - 1].toLowerCase();
+            var size = file.size;
+            var flag = $('#doNotCompress').prop('checked');
+            if ($('#doNotCompress').prop('checked') && (ext == 'jpg' || ext == 'jpeg' || ext == 'png') && file.size > 200000) { // 对大于200k的图片进行压缩
+                new html5ImgCompress(e.target.files[0], {
+                    before: function (file) {
+                        console.log('开始压缩 ...');
+                    },
+                    done: function (file, base64) {
+                        console.log('压缩成功...');
+                        console.log(base64.length + ' / ' + file.size);
+                        var boothId = form.find('input[name="BoothId"]').val();
+                        var tempId = form.find('input[name="TempId"]').val();
+                        var type = form.find('input[name="Type"]').val();
+                        uploadCompressedImage(boothId, tempId, type, base64);
+
+                    },
+                    fail: function (file) {
+                        if (confirm('压缩失败，是否使用原图上传？'))
+                            form.submit();
+                    },
+                    complate: function (file) {
+                        console.log('压缩完成...');
+                    },
+                    notSupport: function (file) {
+                        if (confirm('浏览器不支持压缩图片，是否使用原图上传？'))
+                            form.submit();
+                    }
+                });
+            }
+            else {
+                form.submit();
+            }
+            updateBoothStatus($(this));
+            $(this).val('');
+        });
+
+        function uploadCompressedImage(boothId, tempId, type, base64) {
+            var postData = { boothId: boothId, tempId: tempId, type: type, base64: base64 };
+            console.log(postData);
+            $.ajax({
+                url: '${base}/user/uploadImage',
+                type: 'POST',
+                data: postData,
+                success: function (result) {
+                    showNewImage(result)
+                }
+            })
+        }
+
+        // 更新展位状态
+        function updateBoothStatus(e) {
+            e.parents('.tab-pane').find('.boothstatus').text('上传资料').addClass('label-default')
+                .removeClass('label-success').removeClass('label-danger').removeClass('label-info');
+        }
+
+        // 预览
+        $('.btnpreview').click(function () {
+            var src = $(this).data('src');
+            showImagePreview(src)
+        });
+
+        // 显示图片预览
+        function showImagePreview(src) {
+            $('#modalPreview').modal('show');
+            $('#imgPreview').attr('src', src);
+        }
+
+        // 显示上传成功提示
+        function showSuccessNotify() {
+            $('.upload-success-notify').show().delay(800).fadeOut(200);
+        }
+
+        // 原图上传
+        $('.form-upload').ajaxForm({
+            complete: function (xhr) {
+                var data = JSON.parse(xhr.responseText);
+                showNewImage(data);
+                showSuccessNotify();
+            }
+        });
+
+        //更新展位状态
+        function showNewImage(data) {
+            var target = $('#group_' + data.tempid).find('.loading-template').eq(0);
+            if (JSON.parse(data.result)) {
+                var content = target.find('.document-thumb');
+                if (JSON.parse(data.preview)) {
+                    content.css('background-image', 'url(${base}/user/loadImgByImageType?tempid=' + data.tempid
+                        + '&imagename=' + encodeURI(data.imagesrc) + '&boothid=' + data.boothid + '&mobilephone=' + '' + ')').click(function () {
+                        showImagePreview('${base}/user/loadImgByImageType?tempid=' + data.tempid + '&imagename=' + encodeURI(data.imagesrc) + '&boothid=' + data.boothid + '&mobilephone=' + '');
+                    });
+                }
+                else {
+                    content.append('<a class="document-noimage-icon" href="' + data.imagesrc + '"><i class="fa fa-3x fa-file-image-o"></i></a>');
+                }
+                content.siblings('.document-control').text(data.createTime).removeClass('text-center');
+                content.siblings('.btn-delete-document').attr("data-tempid", data.tempid);
+                content.siblings('.btn-delete-document').attr("data-boothid", data.boothid);
+                content.siblings('.btn-delete-document').attr("data-imagename", data.imagesrc).bind('click', function () {
+                    deleteImage($(this));
+                });
+                target.find('.fa-circle-o-notch').remove();
+                target.removeClass('loading-template');
+                updateDocumentCount(data.tempid);
+                showSuccessNotify();
+            }
+            else {
+                target.remove();
+                alert("上传出错");
+            }
+        }
+
+        // 更新上传图片计数
+        function updateDocumentCount(tempid) {
+            $('.panel-documenttype' + tempid).each(function () {
+                var count = $(this).find('.document-thumb').length;
+                if (count > 0) {
+                    $(this).find('.badge-documentcount' + tempid).text(count);
+                }
+                else {
+                    $(this).find('.badge-documentcount' + tempid).empty();
+                }
+            });
+        }
+
+        //根据当前展位和图片类别显示对应图片
+        function loadImageByCurrentBoothIdAndTempId(tempid) {
+            var formIndex = tempid;
+            $('.btn-delete-document').parents('.document-item').parent().remove();
+
+            $.ajax({
+                url: '${base}/user/loadImageByCurrentBoothIdAndTempId',
+                data: { boothid: curBoothIdValue, tempid:tempid, mobilephone:'' },
+                type: 'post',
+                success: function (data) {
+                    if(data.resultCode == 0){
+                        var boothImageList = JSON.parse(data.boothImageInfoArrayListReslut);
+                        if (boothImageList != null && boothImageList.length > 0) {
+                            for (var i = 0, imageInfo; imageInfo = boothImageList[i++];) {
+                                var loadingHtml = $('#template_loading').html();
+                                $("form[id='uploadImageForm" + formIndex + "']").parent().before(loadingHtml);
+                                //$('.hidden-fileinput').parents('form').eq(formIndex).parent().before(loadingHtml);
+                                var target = $('#group_' + imageInfo.tempid).find('.loading-template').eq(0);
+                                var content = target.find('.document-thumb');
+                                if (imageInfo.preview) {
+                                    content.css('background-image', 'url(${base}/user/loadImgByImageType?tempid=' + imageInfo.tempid
+                                        + '&imagename=' + encodeURI(imageInfo.fileName) + '&boothid=' + imageInfo.curBoothid + '&mobilephone=' + '' + ')').click(function () {
+                                        var imageSrc = $(this).css('backgroundImage');
+                                        var reg = /\"(.*?)\"/g;
+                                        var imageSrcValue = reg.exec(imageSrc);
+                                        showImagePreview(imageSrcValue[1]);
+                                    });
+                                }
+                                else {
+                                    content.append('<a class="document-noimage-icon" href="' + data.description + '"><i class="fa fa-3x fa-file-image-o"></i></a>');
+                                }
+                                content.siblings('.document-control').text(imageInfo.modifyDate).removeClass('text-center');
+                                content.siblings('.btn-delete-document').attr("data-tempid", tempid);
+                                content.siblings('.btn-delete-document').attr("data-boothid", curBoothIdValue);
+                                content.siblings('.btn-delete-document').attr("data-imagename", imageInfo.fileName).bind('click', function () {
+                                    deleteImage($(this));
+                                });
+                                //  当头展位审核状态为（2：正在审核；3：审核通过）时，资料不能再做修改
+                                // 3：表示审核通过，则不让其删掉对应的文件
+
+                                var projectstat = parseInt(boothSetUpAddFlag) == 0 ? true : false;
+                                if (projectstat) {
+                                    $('.hidden-fileinput').parent().remove();
+                                    $('.btn-showremovebooth').remove();
+                                    $('.form-upload').parent().remove();
+                                    $('.btn-delete-document').remove();
+                                }
+                                if(2 == imageInfo.curReviewStatus || 3 == imageInfo.curReviewStatus){
+                                    document.getElementById("booth_current_status_btn").setAttribute("class","disabled btn btn-block btn-lg btn-warning");
+                                    target.find('.btn-delete-document').remove();
+                                    if(3 == imageInfo.curReviewStatus){
+                                        $('.btn-showremovebooth').remove();
+                                    }
+                                    $('.hidden-fileinput').parent().remove();
+                                }else {
+                                    document.getElementById("booth_current_status_btn").setAttribute("class","btn btn-primary btn-block btn-lg");
+                                    $('.deleteHide>.fa-trash').show();
+                                }
+                                /*if (3 != imageInfo.curReviewStatus) {
+                                    $('.deleteHide>.fa-trash').show();
+                                } else {
+                                    //$('.deleteHide>.fa-trash').hide();
+                                    $('.btn-showremovebooth').remove();
+                                    target.find('.btn-delete-document').remove();
+                                    $('.hidden-fileinput').parent().remove();
+                                }*/
+                                target.find('.fa-circle-o-notch').remove();
+                                updateDocumentCount(imageInfo.tempid);
+                                target.removeClass('loading-template');
+                            }
+                        }
+                    }else {
+                        var projectstat = parseInt(boothSetUpAddFlag) == 0 ? true : false;
+                        if (projectstat) {
+                            $('.hidden-fileinput').parent().remove();
+                            $('.btn-showremovebooth').remove();
+                            $('.form-upload').parent().remove();
+                            $('.btn-delete-document').remove();
+                        }
+                    }
+                }
+            });
+        }
+
+        function refreshCurrentPageInfo(boothValue) {
+            alert("boothValue: " + boothValue);
+            $.ajax({
+                url: '${base}/user/getCurrentExpoXicecInfoByBoothId',
+                data: { boothid: boothValue },
+                type: 'post',
+                success: function (data) {
+                    alert(data);
+                    window.location.href = "${base}/user/boothlist.html";
+                }
+            });
+        }
+
+        var jschars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        function generateMixed(n) {
+            var res = "";
+            for(var i = 0; i < n ; i ++) {
+                var id = Math.ceil(Math.random()*35);
+                res += jschars[id];
+            }
+            return res;
+        }
+
+        $('#booth_current_status_btn').click(function (){
+            var showFlag = true;
+            for(var i=0;i<expoBuildTemplateInfoList.length;i++){
+                if(1 == expoBuildTemplateInfoList[i].document_Require){
+                    $('.panel-documenttype' + expoBuildTemplateInfoList[i].id).each(function () {
+                        var count = $(this).find('.document-thumb').length;
+                        if(count < 1){
+                            alert(expoBuildTemplateInfoList[i].document_Name + " 是必填项，请上传资料！");
+                            var target = $(this).data('data-target');
+                            $(target).hide();
+                            showFlag =  false;
+                        }
+                    });
+                }
+            }
+            var btnClass = document.getElementById("booth_current_status_btn").getAttribute("class");
+            if(btnClass.indexOf("disabled btn")>=0){
+                showFlag = false;
+            }
+            if(showFlag){
+                document.getElementById("booth_current_status_btn").setAttribute("data-target","#confirm_dialog");
+                var target = $(this).data('data-target');
+                $(target).show();
+            }else{
+                document.getElementById("booth_current_status_btn").setAttribute("data-target","");
+            }
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>中国·厦门会展金泓信展览</title>
+
+    <link href="${resource}/expoxicec/common.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/_all_skin.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/AdminLTE.min.css">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/Site.css">
+
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="${base}/resource/expoxicec/admin/html5shiv.min.js"></script>
+    <script type="text/javascript" src="${base}/resource/expoxicec/admin/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .extra-property{
+            background: #ecf0f5;
+            float:right;
+
+        }
+    </style>
+</head>
+
+<body class="skin-blue sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="${base}/user/admin/projectlist"><i class="fa fa-home"></i> 项目列表</a></li>
+                <li><a href="${base}/user/admin/userlist"><i class="fa fa-users"></i> 用户管理</a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper" style="overflow:visible;" >
+        <section class="content-header">
+            <h1>用户管理<small></small></h1>
+        </section>
+
+        <section class="content">
+            <p><a class="btn btn-primary" href="${base}/user/admin/admin_new_user">创建用户</a></p>
+            <table class="table table-condensed table-hover" id="table-result">
+                <thead>
+                <tr>
+                    <th>手机<br/>
+                        <input id="userMobilePhone" style="width:100%;height:20px;" type="text" onkeyup="filter();"/>
+                    </th>
+                    <th>状态<br/>
+                        <select id="userStatus" style="width:100%;height:20px;" onchange="filter();">
+                            <option selected value="-1">全部</option>
+                            <option value="0">未完成注册</option>
+                            <option value="1">完成注册</option>
+                            <option value="2">激活</option>
+                            <option value="3">锁定</option>
+                            <option value="4">禁用</option>
+                        </select>
+                    </th>
+                    <th>姓名<br/>
+                        <input id="userName" style="width:100%;height:20px;" type="text" onkeyup="filter();"/>
+                    </th>
+                    <th>Email<br/>
+                        <input id="userEmail" style="width:100%;height:20px;" type="text" onkeyup="filter();"/>
+                    </th>
+                    <th>公司<br/>
+                        <input id="userCompany" style="width:100%;height:20px;" type="text" onkeyup="filter();"/>
+                    </th>
+                    <th>VIP<br/>
+                        <select id="userVip" style="width:100%;height:20px;" onchange="filter();">
+                            <option selected value="-1">全部</option>
+                            <option value="0">0</option>
+                        </select></th>
+                    <th>创建时间<br/>
+                        <input id="userRegisterTime" style="width:100%;height:20px;" type="text" onkeyup="filter();"/>
+                    </th>
+                    <th>注册方式<br/>
+                        <select id="userRegisterType" style="width:100%;height:20px;" onchange="filter();">
+                            <option selected value="-1">全部</option>
+                            <option value="0">网页注册</option>
+                            <option value="1">手机注册</option>
+                        </select></th>
+                </tr>
+                </thead>
+
+                <tbody id="content"></tbody>
+
+            </table>
+        </section>
+    </div>
+    <div style="overflow: hidden;clear: both;background:#ecf0f5;padding: 5px 10px;box-sizing: border-box;">
+        <div class="dataTables_info" style="float:left;margin: 20px 0;" role="status" aria-live="polite">共 <label id="totalSumPage"></label> 页 <label id="totalSumValue"></label> 条记录</div>
+        <div id="pagination" class="pagination extra-property"></div>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script type="text/javascript">
+    var pageSize = 20;          //每页显示多少条记录
+    var pageCurrentIndex = 0;
+    var totalSize;             //总共多少记录
+    var filterParm = "?";
+
+    $(document).ready(function () {
+        Init(pageCurrentIndex + 1);
+        initPaginationView();
+    });
+
+    function Init(pageIndex){      //这个参数就是点击的那个分页的页数索引值，第一页为0，上面提到了，下面这部分就是AJAX传值了
+        var temp = (filterParm=="?"?"${base}/user/queryUserListByPage?pageIndex="+pageIndex:"${base}/user/queryUserListByPage" + filterParm);
+        $.ajax({
+            type: "post",
+            url:temp,
+            async: false,
+            dataType: "json",
+            success: function (data) {
+                $("#content").empty();
+                var array = data.rows;
+                if(pageIndex<2){
+                    document.getElementById("totalSumPage").innerHTML = parseInt(data.total/pageSize) + 1;
+                    document.getElementById("totalSumValue").innerHTML = data.total;
+                }
+                totalSize = data.total;
+                for(var i=0;i<array.length;i++){
+                    var info=array[i];
+                    if(info != null){
+                        if(info.status != null && "激活" != info.status){
+                            $("#content").append("<tr class='bg-danger'><td><a href='${base}/user/admin/userinfo/details.html?telphone=" + info.mobilephone + "'>" + info.mobilephone
+                                + "</a></td><td>" + info.status + "</td><td>" + info.username +
+                                "</td><td>" + info.email + "</td><td>" + info.company + "</td><td>" + info.vip + "</td><td>" + info.create_Time +
+                                "</td><td>" + info.register_type + "</td></tr>");
+                        }else{
+                            $("#content").append("<tr><td><a href='${base}/user/admin/userinfo/details.html?telphone=" + info.mobilephone + "'>" + info.mobilephone
+                                + "</a></td><td>" + info.status + "</td><td>" + info.username +
+                                "</td><td>" + info.email + "</td><td>" + info.company + "</td><td>" + info.vip + "</td><td>" + info.create_Time +
+                                "</td><td>" + info.register_type + "</td></tr>");
+                        }
+                    }
+                }
+            },
+            error: function () {
+                //alert("请求超时，请重试！");
+            }
+        });
+    }
+
+    function initPaginationView() {
+        $("#pagination").pagination(totalSize,    //分页总数量，必须参数
+            {
+                callback: function (pageCurrentIndex) {  //为翻页调用次函数。
+                    Init(pageCurrentIndex+1);
+                    return false;
+                },
+                prev_text: "« 上一页",
+                next_text: "下一页 »",
+                activeCls: "active",
+                homePage: "首页",
+                endPage: "末页",
+                items_per_page: pageSize,
+                num_edge_entries: 5,       //两侧首尾分页条目数
+                num_display_entries: 10,    //连续分页主体部分分页条目数
+                current_page: pageCurrentIndex,   //当前页索引
+                /*jump: true,
+                jumpIptCls: "jump-ipt",
+                jumpBtnCls: "jump-btn",
+                jumpBtn: "跳转",*/
+                link_to: "?page=__id__", //分页的js中会自动把"__id__"替换为当前的数：1
+            });
+    }
+    function filter(){
+        filterParm = "?";
+        if(document.getElementById("userMobilePhone").value != ""){
+            filterParm += '&telphone=' + encodeURI(document.getElementById("userMobilePhone").value);
+        }
+        if(document.getElementById("userStatus").value != ""){
+            filterParm += '&status=' + encodeURI(document.getElementById("userStatus").value);
+        }
+        if(document.getElementById("userName").value != ""){
+            filterParm += '&name=' + encodeURI(document.getElementById("userName").value);
+        }
+        if(document.getElementById("userEmail").value != ""){
+            filterParm += '&email=' + encodeURI(document.getElementById("userEmail").value);
+        }
+        if(document.getElementById("userCompany").value != ""){
+            filterParm += '&company=' + encodeURI(document.getElementById("userCompany").value);
+        }
+        if(document.getElementById("userVip").value != ""){
+            filterParm += '&vip=' + encodeURI(document.getElementById("userVip").value);
+        }
+        if(document.getElementById("userRegisterTime").value != ""){
+            filterParm += '&createtime=' + encodeURI(document.getElementById("userRegisterTime").value);
+        }
+        if(document.getElementById("userRegisterType").value != ""){
+            filterParm += '&registertype=' + encodeURI(document.getElementById("userRegisterType").value);
+        }
+
+        Init(pageCurrentIndex + 1);
+        initPaginationView();
+    }
+</script>
+</body>
+</html>

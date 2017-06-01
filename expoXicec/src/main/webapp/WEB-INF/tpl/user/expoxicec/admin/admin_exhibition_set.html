@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>中国·厦门会展金泓信展览</title>
+</head>
+
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+
+    <aside class="main-sidebar">
+        <#include "/user/expoxicec/admin/section_content.html" />
+    </aside>
+
+    <div class="content-wrapper" style="min-height: 308px;">
+        <section class="content-header">
+            <h1>${tFairInfo.fair_name}<small>展位类型</small></h1>
+        </section>
+
+        <section class="content">
+            <p><a class="btn btn-default" href="${base}/user/admin/project/details?fairid=fairid-${tFairInfo.id}"><i class="fa fa-reply"></i>返回项目主页</a></p>
+            <div class="nav-tabs-custom">
+                <ul id="tab_document_header_ul" class="nav nav-tabs"></ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_pane_content">
+                        <p id="btn-href-link">
+                            <a class="btn btn-primary" id="createDocumentTypeId" href="#" title="添加文档"><i class="fa fa-plus"></i>添加 特装 所需的文档</a>
+                            <a class="btn btn-default btn-deleteboothtype pull-right" id="deleteDocumentTypeId" href="#"><i class="fa fa-trash-o"></i> 删除展位类型</a>
+                        </p>
+                        <div class="table-responsive" id="table_responsive_content" style="display: block">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th style="width:1em;"></th>
+                                    <th style="width:1em;"></th>
+                                    <th style="width:1em;"></th>
+                                    <th style="min-width:8em;">文档名称</th>
+                                    <th style="min-width:4em;">类型</th>
+                                    <th style="min-width:4em;">大小</th>
+                                    <th>备注</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody id="document_info_data_body"></tbody>
+                            </table>
+                        </div>
+                        <div class="alert alert-info" id="alert_info_content" style="display: none">未设置文档类型</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-warning"></i> 请注意！</h4>
+                <p>所设展位类型请与导入的展位类型保持一致！<br />避免在正式开始上传资料后变更 展位/资料类型 的配置！</p>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 3.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script>
+    var tExhibitionTypeInfoList;
+    $(document).ready(function () {
+        $.ajax({
+            url: "${base}/user/load/admin/exhibition/type/list",
+            type: "post",
+            dataType: "json",
+            success: function (e) {
+                if(e.tExhibitionTypeList != null){
+                    tExhibitionTypeInfoList = JSON.parse(e.tExhibitionTypeList);
+                    //获取到Ul列表
+                    var ul = document.getElementById("tab_document_header_ul");
+                    for(var i=0;i<tExhibitionTypeInfoList.length;i++){
+                        //创建元素Li
+                        var li = document.createElement("li");
+                        var tab_id_value = tExhibitionTypeInfoList[i].id;
+                        //将节点设置为激活状态
+                        if(i == 0) {
+                            li.className="active";
+                        }
+
+                        li.id = i;
+                        li.setAttribute("data_id", tab_id_value);
+                        //这里需要调整
+                        //向li中添加内容
+                        li.innerHTML = "<a class='tab-boothtype' data-tabid='" + tab_id_value + "' data-toggle='tab'>" + tExhibitionTypeInfoList[i].exhibition_type_name + "</a>";
+
+                        li.onclick = function(){
+                            //将节点设置为激活状态
+                            li.className="active";
+                            var id_value = $(this).attr("id");
+                            var data_tabid_value = $(this).attr("data_id");
+
+                            createOrDeleteDocumentBtn(tExhibitionTypeInfoList[id_value]);
+                            loadDocumentTypeDataByTabId(data_tabid_value);
+                        };
+                        //向ul追加元素li
+                        ul.appendChild(li);
+                    }
+                    var addli = document.createElement("li");
+                    addli.innerHTML = "<a href='${base}/user/admin/exhibition/type/create/page'><i class='fa fa-plus'></i> 添加展位类型</a>";
+                    ul.appendChild(addli);
+                    var setli = document.createElement("li");
+                    setli.setAttribute("class", "pull-right");
+                    setli.innerHTML = "<a href='${base}/user/admin/project/set'><i class='fa fa-gear'></i>项目设置</a>";
+                    ul.appendChild(setli);
+
+                    createOrDeleteDocumentBtn(tExhibitionTypeInfoList[0]);
+                    loadDocumentTypeDataByTabId(tExhibitionTypeInfoList[0].id);
+                }
+            }
+        });
+
+        function createOrDeleteDocumentBtn(documentEntity) {
+            var btnHrefLink = document.getElementById("btn-href-link");
+            btnHrefLink.innerHTML="";
+            var createDocumentHref = document.createElement("a");
+            createDocumentHref.setAttribute("class","btn btn-primary");
+            createDocumentHref.setAttribute("title","添加文档");
+            createDocumentHref.innerHTML = "<i class='fa fa-plus'></i> 添加 " + documentEntity.exhibition_type_name + " 所需的文档";
+            createDocumentHref.href = "${base}/user/admin/exhibition/type/create?exhibitionid=" + documentEntity.id;
+            btnHrefLink.appendChild(createDocumentHref);
+
+            var deleteDocumentHref = document.createElement("a");
+            deleteDocumentHref.setAttribute("class","btn btn-default btn-deleteboothtype pull-right");
+            deleteDocumentHref.setAttribute("onclick","deleteExhibitionType(" + documentEntity.id + ")");
+            //deleteDocumentHref.href = "${base}/user/admin/exhibition/type/delete?exhibitionid=" + documentEntity.id;
+            deleteDocumentHref.innerHTML = "<i class='fa fa-trash-o'></i> 删除展位类型";
+            btnHrefLink.appendChild(deleteDocumentHref);
+        }
+        function loadDocumentTypeDataByTabId(tabId) {
+            $.ajax({
+                url: '${base}/user/admin/document/type/data/list',
+                data: { documentTypeId: tabId },
+                type: 'post',
+                dataType: "json",
+                success: function (e) {
+                    if(e.resultCode == 0){
+                        document.getElementById('alert_info_content').style.display = "none";
+                        document.getElementById('table_responsive_content').style.display = "block";
+                        var document_info_data_body = document.getElementById("document_info_data_body");
+                        document_info_data_body.innerHTML = "";
+                        var documentTypeDataInfoList = JSON.parse(e.documentTypeInfoList);
+                        for(var i=0;i<documentTypeDataInfoList.length;i++){
+                            var tr = document.createElement('tr');
+                            var document_id = document.createElement("td");
+                            document_id.setAttribute("class", "text-right");
+                            document_id.innerHTML = i+1;
+                            tr.appendChild(document_id);
+
+                            var document_required = document.createElement("td");
+                            if(documentTypeDataInfoList[i].document_Require == 1){
+                                document_required.innerHTML = "<span class='label label-default'>必选</span>";
+                            }else{
+                                document_required.innerHTML = "";
+                            }
+                            tr.appendChild(document_required);
+
+                            var document_attachment = document.createElement("td");
+                            var file_path = documentTypeDataInfoList[i].document_Template;
+                            if(file_path != null && file_path.length != 0) {
+                                document_attachment.innerHTML = "<a href='${base}/user/admin/document/type/show/attachment?filepath=" + file_path + "' target='_blank'><i class='fa fa-paperclip'></i></a>";
+                            }else{
+                                document_attachment.innerHTML = "";
+                            }
+                            tr.appendChild(document_attachment);
+
+                            var document_type_name = document.createElement("td");
+                            document_type_name.innerHTML = "<a href='${base}/user/admin/document/type/edit?documentid=" + generateMixed(16) + "-" + documentTypeDataInfoList[i].id + '\'>' + documentTypeDataInfoList[i].document_Name + "</a>";
+                            tr.appendChild(document_type_name);
+
+                            var document_type_value = document.createElement("td");
+                            document_type_value.innerHTML = documentTypeDataInfoList[i].document_Type;
+                            tr.appendChild(document_type_value);
+
+                            var document_type_size = document.createElement("td");
+                            document_type_size.innerHTML = documentTypeDataInfoList[i].document_Size;
+                            tr.appendChild(document_type_size);
+
+                            var document_type_remark = document.createElement("td");
+                            document_type_remark.innerHTML = documentTypeDataInfoList[i].document_Remark;
+                            tr.appendChild(document_type_remark);
+
+                            var document_type_delete_btn = document.createElement("td");
+                            document_type_delete_btn.setAttribute("class", "text-right");
+                            document_type_delete_btn.innerHTML = "<a class='btn btn-default btn-xs btn-deletedoctype' data-doctypeid='" + documentTypeDataInfoList[i].id + "' onclick='deleteDocumentType(" + documentTypeDataInfoList[i].id + ")'><i class='fa fa-trash-o'></i></a>";
+                            tr.appendChild(document_type_delete_btn);
+
+                            document_info_data_body.appendChild(tr);
+                        }
+                    }else{
+                        document.getElementById('table_responsive_content').style.display = "none";
+                        document.getElementById('alert_info_content').style.display = "block";
+                    }
+                }
+            });
+        }
+    });
+
+    var tab = '';
+    if (tab == '') {
+        $('.tab-boothtype').first().click();
+    }else {
+        $('.tab-boothtype[data-tabid="'+tab+'"]').click();
+    }
+
+    function deleteDocumentType(doctypeid){
+        if (confirm('确定删除此文档类型？')) {
+            $.ajax({
+                url: '${base}/user/admin/document/type/delete',
+                type: "POST",
+                data: { documentid: doctypeid },
+                success: function (e) {
+                    if (e.resultCode == 0) {
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+    }
+
+    function deleteExhibitionType(exhibitionid){
+        if (confirm('确定删除此展位类型？')) {
+            $.ajax({
+                url: '${base}/user/admin/exhibition/type/delete',
+                type: "POST",
+                data: { exhibitionid: exhibitionid },
+                success: function (e) {
+                    if (e.resultCode == 0) {
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+    }
+    /*$('.btn-deletedoctype').click(function () {
+        var doctypeid = $(this).data('doctypeid');
+        if (confirm('确定删除此文档类型？')) {
+            $.ajax({
+                url: '${base}/user/admin/document/type/delete',
+                type: "POST",
+                data: { documentid: doctypeid },
+                success: function (e) {
+                    if (e.resultCode == 0) {
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+    });*/
+    /*$('.btn-deleteboothtype').click(function () {
+        var boothtypeid = $(this).data('boothtypeid');
+        console.log(boothtypeid);
+        if (confirm('确定删除此展位类型？')) {
+            $.ajax({
+                url: '/Admin/BoothType/Delete',
+                type: "POST",
+                data: { id: boothtypeid },
+                success: function (e) {
+                    if (e.result) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert(e.msg);
+                    }
+                }
+            })
+        }
+    });*/
+
+    var jschars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+    function generateMixed(n) {
+        var res = "";
+        for(var i = 0; i < n ; i ++) {
+            var id = Math.ceil(Math.random()*35);
+            res += jschars[id];
+        }
+        return res;
+    }
+</script>
+</body>
+</html>

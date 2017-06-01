@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>中国·厦门会展金泓信展览</title>
+    <style>
+        .extra-property{
+            background: #ecf0f5;
+            float:right;
+
+        }
+    </style>
+</head>
+
+<body class="skin-blue sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="${base}/user/admin/projectlist"><i class="fa fa-home"></i> 项目列表</a></li>
+                <li><a href="${base}/user/admin/userlist"><i class="fa fa-users"></i> 用户管理</a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper" style="overflow:visible;" >
+        <section class="content-header">
+            <h1>修改用户信息<small></small></h1>
+        </section>
+
+        <section class="content">
+            <form action="${base}/user/admin/edit/updateInfo" method="post" id="formEditUserInfo">
+                <input data-val="true" data-val-required="id 字段是必需的。" id="id" name="id" type="hidden" value="${tExpoXicecInfo.id}" />
+                <div class="box box-primary">
+                <div class="box-header">
+                    <div class="box-title">创建用户</div>
+                </div>
+                <div class="box-body"><div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">手机</label>
+                        <div class="col-md-8">
+                            <input class="form-control text-box single-line" id="mobile" name="mobile" type="text" value="${tExpoXicecInfo.mobilephone}" />
+                        </div>
+                        <div class="col-md-2 form-control-static">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="mobile" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">姓名</label>
+                        <div class="col-md-8">
+                            <input class="form-control text-box single-line" id="name" name="name" type="text" value="${tExpoXicecInfo.username}" />
+                        </div>
+                        <div class="col-md-2 form-control-static">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="name" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">公司</label>
+                        <div class="col-md-8">
+                            <input class="form-control text-box single-line" id="company" name="company" type="text" value="${tExpoXicecInfo.company}" />
+                        </div>
+                        <div class="col-md-2 form-control-static">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="company" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Email</label>
+                        <div class="col-md-8">
+                            <input class="form-control text-box single-line" id="email" name="email" type="text" value="${tExpoXicecInfo.email}" />
+                        </div>
+                        <div class="col-md-2 form-control-static">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="email" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">密码</label>
+                        <div class="col-md-8">
+                            <input class="form-control text-box single-line" id="password" name="password" type="text" value="${tExpoXicecInfo.password}" />
+                        </div>
+                        <div class="col-md-2 form-control-static">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="password" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">状态</label>
+                        <div class="col-md-8">
+                            <select class="form-control" data-val="true" data-val-required="Status 字段是必需的。" id="status" name="status">
+                                <option value="0">未完成注册</option>
+                                <option value="1">完成注册</option>
+                                <option value="2">激活</option>
+                                <option value="3">锁定</option>
+                                <option value="4">禁用</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 form-control-static">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="status" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">评级</label>
+                        <div class="col-md-8">
+                            <input class="form-control text-box single-line" data-val="true" data-val-number="字段 VIP 必须是一个数字。" data-val-required="VIP 字段是必需的。" id="vip" name="vip" type="number" value="${tExpoXicecInfo.vip}" />
+                        </div>
+                        <div class="col-md-2 form-control-static">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="vip" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">已发短信</label>
+                        <div class="col-md-8">
+                            <input class="form-control text-box single-line" data-val="true" data-val-number="字段 SMSCount 必须是一个数字。" data-val-required="SMSCount 字段是必需的。" id="smsNum" name="smsNum" type="number" value="${tExpoXicecInfo.msg_num}" /></div>
+                        <div class="col-md-2 form-control-static">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="smsNum" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">权限</label>
+                        <div class="col-md-8">
+                            <div class="checkbox">
+                                <label>
+                                    <input data-val="true" data-val-required="IsAdmin 字段是必需的。" id="user_role" name="user_role" type="checkbox" value="true" />
+                                    <input name="IsAdmin" type="hidden" value="false" />
+                                    管理员
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-offset-2 col-md-8">
+                            <button class="btn btn-primary" type="button" id="btnEditUserInfo">修改</button>
+                            <a class="btn btn-default" href="${base}/user/admin/userinfo/details.html?telphone=${tExpoXicecInfo.mobilephone}">取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        changeSelectedStatus();
+        changeSelectedUseRole();
+    });
+
+    function changeSelectedStatus(){
+        jsSelectItemByValue(document.getElementById("status"),${tExpoXicecInfo.status});
+    }
+
+    function jsSelectItemByValue(objSelect,objItemText) {
+        for(var i=0;i<objSelect.options.length;i++) {
+            if(objSelect.options[i].value == objItemText) {
+                objSelect.options[i].selected = true;
+                break;
+            }
+        }
+    }
+
+    function changeSelectedUseRole(){
+        jsSelectCheckBoxByValue(document.getElementsByName("user_role"),${tExpoXicecInfo.user_role!""});
+    }
+
+    function jsSelectCheckBoxByValue(objCheckbox,objItemText){
+        if(1 == objItemText){
+            for(var i=0;i<objCheckbox.length;i++) {
+                objCheckbox[i].checked = true;
+                break;
+            }
+        }else{
+            for(var i=0;i<objCheckbox.length;i++) {
+                objCheckbox[i].checked = false;
+                break;
+            }
+        }
+    }
+
+    // 修改用户信息
+    $('#btnEditUserInfo').click(function (){
+        var form = $('#formEditUserInfo');
+        $("#formEditUserInfo").submit();
+    });
+</script>
+</body>
+</html>

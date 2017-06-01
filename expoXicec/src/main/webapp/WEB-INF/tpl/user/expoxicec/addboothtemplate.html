@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>中国·厦门会展金泓信展览</title>
+
+    <link href="${resource}/expoxicec/common.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/bootstrap.min.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/all-skins.min.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/AdminLTE.min.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/font-awesome.min.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/Site.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/StepWizard.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/jquery.webui-popover.min.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/jquery.pagewalkthrough.min.css" rel="stylesheet">
+    <link href="${resource}/expoxicec/bootstrap-tokenfield.min.css" rel="stylesheet">
+
+    <script src="${resource}/expoxicec/jquery-2.1.0.js" type="text/javascript"></script>
+    <script src="${resource}/expoxicec/select2.min.js"></script>
+    <script src="${resource}/expoxicec/bootstrap.min.js"></script>
+    <script src="${resource}/expoxicec/prettify.min.js"></script>
+    <script src="${resource}/expoxicec/anchor.min.js"></script>
+
+    <link href="${resource}/expoxicec/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="${resource}/expoxicec/select2.min.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+
+<div>
+    <#include "/common/message.ftl" />
+    <div class="box box-primary">
+        <div class="box-header"><div class="box-title">添加展位</div></div>
+        <div class="box-body">
+            <form action="${base}/user/createbooth" class="form-horizontal" id="formCreateBooth" method="post" role="form" enctype="multipart/form-data">
+                <input id="bootharea" name="bootharea" type="hidden"/>
+                <input id="exhibition_area" name="exhibition_area" type="hidden"/>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">展位号</label>
+                    <div class="col-sm-7">
+                        <select class="form-control" name="booth" id="booth"></select>
+                        <div>展位面积合计 <code id="totalArea" name="totalArea">0</code>㎡</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">展位类型</label>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="type" name="type">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">参展单位</label>
+                    <div class="col-sm-7"><input type="text" class="form-control" name="company" id="company"  /></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">搭建单位名</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" name="contact" id="contact" value="${contactname}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">联系电话</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" name="mobile" id="mobile" value="${mobile}"/>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:20px;margin-bottom:40px">
+                    <div class="col-sm-7 col-sm-offset-3">
+                        <p id="CreateBoothSummary" class="text-danger"></p>
+                        <button type="button" class="btn btn-primary" id="btnCreateBooth">添加展位</button>
+                        <a type="button" class="btn btn-default" href="#" onclick="history.go(-1)">取消</a>
+                    </div>
+                </div>
+                <input name="Booth" type="hidden" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<#include "/user/expoxicec/bottom.html" />
+</body>
+
+<div class="shelter" style="height:100%;width:100%;background:#e5e5e5;opacity: 0.6;position: fixed;top:0;left:0;z-index: 10000000;display: none;">
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="float: none;   display: block; margin-left: auto;   margin-right: auto;margin-top: 300px; ">
+        <img src="${base}/resource/images/loading.png" style="width:100%;display: block;border: 0;" id="loadingImg">
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            url:"${base}/user/queryExhibitionType",
+            success : function(result) {
+                if(result){
+                    country = result;
+                    $("#type").html('');
+                    for(var i=0,a;a=country[i++];){
+                        $("#type").append('<option value="'+a.id+'">' + a.exhibition_type_name + '</option>');
+                    }
+                }
+            }
+        });
+    });
+
+    // 添加展位
+    $('#btnCreateBooth').click(function (){
+        CreateBooth();
+    });
+
+    var minimumInputLength = parseInt('1');
+    $("#booth").select2({
+        ajax: {
+            url: "${base}/user/queryCompanyInfoByBoothNumber",
+            dataType: 'json',
+            delay: 250,
+            type: 'POST',
+            data: function (params) {
+                $(".shelter").delay(50).fadeIn();
+                return {
+                    booth: params.term,
+                    pageSize: params.page
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                $(".shelter").delay(50).fadeOut();
+                return {
+                    results: data.items,
+                    pagination: {
+                        more: (params.page * 15) < data.total
+                    }
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (markup) { return markup; },
+        minimumInputLength: minimumInputLength,
+        templateResult: formatRepo,
+        templateSelection: formatRepo
+    });
+
+    function formatRepo(repo) {
+        if (repo.loading) return repo.company;
+        $('#formCreateBooth').find('[name="Booth"]').val(repo.booth);
+        var markup = '<span><strong>' + repo.booth + '</strong> ' + repo.company + ' (' + repo.area + '㎡)</span>';
+        SetCompany(repo.company);
+        SetArea(repo.area);
+        SetExhibitionArea(repo.exhibition_area);
+        return markup;
+    }
+
+    function SetCompany(company) {
+        $('#formCreateBooth').find('[name="company"]').val(company);
+        $('#formCreateBooth').find('[name="company"]').val(company);
+    }
+
+    function SetArea(area) {
+        //$('#formCreateBooth').find('[name="Company"]').val(company);
+        document.getElementById("bootharea").value = area;
+        $('#totalArea').text(area);
+    }
+
+    function SetExhibitionArea(exhibitionArea) {
+        document.getElementById("exhibition_area").value = exhibitionArea;
+    }
+
+    function CreateBooth() {
+        var form = $('#formCreateBooth');
+        var company = form.find('[name="company"]').val();
+        var contact = form.find('[name="contact"]').val();
+        var mobile = form.find('[name="mobile"]').val();
+        var type = form.find('[name="type"]').val();
+        var booth = form.find('[name="Booth"]').val();
+        if (booth == '') {
+            $('#CreateBoothSummary').text('请填写展位号');
+            return;
+        }
+        if (type == '') {
+            $('#CreateBoothSummary').text('请选择展位类型');
+            return;
+        }
+        if (contact == '') {
+            $('#CreateBoothSummary').text('请填写展位联系人');
+            return;
+        }
+        if (mobile == '') {
+            $('#CreateBoothSummary').text('请填写联系电话');
+            return;
+        }
+        $("#formCreateBooth").submit();
+    }
+
+    function updateTotalArea(value) {
+        var boothnos = $('#booth').tokenfield('getTokensList', ',');
+        console.log(boothnos);
+        $.ajax({
+            url: '/Booth/GetTotalArea',
+            type: 'POST',
+            data: { ProjectId: 'b0143030-8bc6-e611-aa57-0050568027d2', Name: boothnos },
+            success: function (area) {
+                $('#infoArea').text(area);
+            }
+        });
+    }
+
+    var autoCapitalization = parseInt('1') == 1 ? true : false;
+    $('#booth').parents('.form-group').find('p:first').hide();
+</script>
+</html>

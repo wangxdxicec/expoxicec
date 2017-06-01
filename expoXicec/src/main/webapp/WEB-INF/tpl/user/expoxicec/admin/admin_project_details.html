@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://java.sun.com/jsf/html">
+<head>
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <script src="${base}/resource/expoxicec/admin/echarts.min.js" type="text/javascript"></script>
+    <link href="${base}/resource/expoxicec/admin/asset/bootstrap.css" rel="stylesheet">
+    <link href="${base}/resource/expoxicec/admin/asset/bootstrap-responsive.css" rel="stylesheet">
+    <link href="${base}/resource/expoxicec/admin/asset/codemirror.css" rel="stylesheet">
+    <link href="${base}/resource/expoxicec/admin/asset/monokai.css" rel="stylesheet">
+    <title>中国·厦门会展金泓信展览</title>
+</head>
+
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <#include "/user/expoxicec/admin/section_content.html" />
+    </aside>
+    <div class="content-wrapper" style="overflow:visible;" >
+        <section class="content-header">
+            <h1>${tFairInfo.fair_name}<small></small></h1>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="box box-primary">
+                        <div class="box-header"><div class="box-title">项目信息</div></div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-3 text-center margin-bottom">
+                                    <h3>
+                                        <#if tFairInfo.fair_enable == 0><i class="fa fa-minus-circle fa-5x text-red"></i></#if>
+                                        <#if tFairInfo.fair_enable == 1><i class="fa fa-upload fa-5x text-green"></i></#if>
+                                        <#if tFairInfo.fair_enable == 2><i class="fa fa-minus-circle fa-5x text-red"></i></#if>
+                                    </h3>
+                                    <p>
+                                        <#if tFairInfo.fair_enable == 0><span class="label label-default">停用</span></#if>
+                                        <#if tFairInfo.fair_enable == 1><span class="label label-success">可上传资料</span></#if>
+                                        <#if tFairInfo.fair_enable == 2><span class="label label-danger">已截止上传</span></#if>
+                                    </p>
+                                </div>
+                                <div class="col-md-3 text-center margin-bottom">
+                                    <a class="btn btn-app" href="${base}/user/admin/project/set"><i class="fa fa-cogs"></i>项目设置</a>
+                                    <a class="btn btn-app" href="${base}/user/admin/exhibition/list"><span class="badge bg-aqua" id="boothTotalNumSpan" name="boothTotalNumSpan"></span><i class="fa fa-list"></i>展位信息</a>
+                                    <a class="btn btn-app" href="${base}/user/admin/exhibition/audit/list/info"><i class="fa fa-check-square-o"></i>资料审核</a>
+                                    <a class="btn btn-app" href="${base}/user/admin/fair/user/list"><i class="fa fa-users"></i>申报用户</a>
+                                    <a class="btn btn-app" href="javascript:alert('敬请期待')"><i class="fa fa-envelope"></i>群发短信</a>
+                                    <a class="btn btn-app" href="${base}/user/admin/redirectUserBoothSetupByFairType?fairId=${tFairInfo.id}-${tFairInfo.id}" target="_blank"><i class="fa fa-internet-explorer"></i>用户界面</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-group list-group-unbordered">
+                                        <li class="list-group-item"><b>主办单位</b> <span class="pull-right">${tFairInfo.fair_organization}</span></li>
+                                        <li class="list-group-item"><b>展位</b> <span class="pull-right" id="boothTotalNum" name="boothTotalNum"></span></li>
+                                        <li class="list-group-item"><b>提交开始时间</b> <span class="pull-right">${tFairInfo.fair_begin_time}</span></li>
+                                        <li class="list-group-item"><b>提交截止时间</b> <span class="pull-right">${tFairInfo.fair_end_time}</span></li>
+                                        <li class="list-group-item clearfix">
+                                            <b>展位类型</b>
+                                            <div class="pull-right">
+                                                <ul>
+                                                    <li>特装 <span class="badge bg-gray">7</span></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <div class="box-title">展位信息</div>
+                            <div class="box-tools">
+                                <div class="form-group form-group-sm">
+                                    <select class="form-control" id="boothreg-type">
+                                        <option value="">全部</option>
+                                        <option value="特装">特装</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-body no-padding">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover" id="summary-boothreg">
+                                    <thead>
+                                    <tr>
+                                        <th>区域</th>
+                                        <th class="text-center">面积</th>
+                                        <th class="text-center">展位数</th>
+                                        <th class="text-center">确认数</th>
+                                        <th style="min-width:6em;">进度</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <script type="text/template" id="template-boothreg">
+                                <tr>
+                                    <td>{{REGION}}</td>
+                                    <td class="text-center">{{AREA}}</td>
+                                    <td class="text-center">{{COUNT}}</td>
+                                    <td class="text-center">{{CHECKED}}</td>
+                                    <td title="已确认：{{CHECKPERCENT}}%">
+                                        <div class="progress progress-sm progress-striped active">
+                                            <div class="progress-bar progress-bar-primary" style="width:{{CHECKPERCENT}}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </script>
+                        </div>
+                        <div class="overlay" id="overlay-boothreg">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="box box-primary">
+                        <div class="box-header"><div class="box-title">报审进度</div></div>
+                        <div class="box-body box-profile">
+                            <div class="chart-responsive margin-bottom">
+                                <!--<canvas id="pieChart" height="150"></canvas>-->
+                                <div id="pieChart" style="height: 150px;"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4 border-right">
+                                    <div class="description-block text-muted">
+                                        <h5 class="description-header" id="boothaudit-wait-count"></h5>
+                                        <span class="description-text">待审核</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="description-block text-red">
+                                        <h5 class="description-header" id="boothaudit-fail-count"></h5>
+                                        <span class="description-text">不通过</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 border-left">
+                                    <div class="description-block text-green">
+                                        <h5 class="description-header" id="boothaudit-ok-count"></h5>
+                                        <span class="description-text">通过</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overlay" id="overlay-audit"><i class="fa fa-refresh fa-spin"></i></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script type="text/javascript">
+    var urlBoothRegister = '${base}/user/admin/booth/register/summary';
+    var urlAuditSummary = '${base}/user/admin/booth/audit/summary';
+
+    function GetBoothRegSummary() {
+        $('#overlay-boothreg').show();
+        var type = $('#boothreg-type').val();
+        $.ajax({
+            url: urlBoothRegister,
+            type: 'post',
+            data: { fairid: ${tFairInfo.id} },
+            success: function (e) {
+                if (e.boothRegisterSummaryList != null) {
+                    var boothSummaryList = JSON.parse(e.boothRegisterSummaryList);
+                    var template = $('#template-boothreg').html();
+                    var html = '';
+                    var boothTotal = 0;
+                    for (var i = 0; i < boothSummaryList.length; i++) {
+                        boothTotal += boothSummaryList[i].count;
+                        html += template
+                            .replace(/\{{REGION}}/g, boothSummaryList[i].region)
+                            .replace(/\{{COUNT}}/g, boothSummaryList[i].count)
+                            .replace(/\{{CHECKED}}/g, boothSummaryList[i].checked)
+                            .replace(/\{{CHECKPERCENT}}/g, boothSummaryList[i].count > 0 ? parseInt( boothSummaryList[i].checked * 100 / boothSummaryList[i].count) : 0)
+                            .replace(/\{{AREA}}/g, parseInt(boothSummaryList[i].area));
+                    }
+                    document.getElementById("boothTotalNumSpan").innerHTML = boothTotal;
+                    document.getElementById("boothTotalNum").innerHTML = boothTotal;
+                    $('#summary-boothreg').show().find('tbody').html(html);
+                    $('#overlay-boothreg').show();
+                }
+            },
+            complete: function () {
+                $('#overlay-boothreg').hide();
+            }
+        })
+    }
+
+    function GetAuditSummary() {
+        $('#overlay-audit').show();
+        $.ajax({
+            url: urlAuditSummary,
+            type: 'post',
+            data: { fairid: ${tFairInfo.id} },
+            success: function (e) {
+                if (e.boothAuditSummaryList != null) {
+                    var boothAuditList = JSON.parse(e.boothAuditSummaryList);
+                    $('#boothaudit-wait-count').text(boothAuditList[0].value);
+                    $('#boothaudit-fail-count').text(boothAuditList[1].value);
+                    $('#boothaudit-ok-count').text(boothAuditList[2].value);
+                    drawPieChart(boothAuditList[0].value, boothAuditList[0].label,
+                        boothAuditList[1].value, boothAuditList[1].label,
+                        boothAuditList[2].value, boothAuditList[2].label);
+                }
+            },
+            complete: function () {
+                $('#overlay-audit').hide();
+            }
+        })
+    }
+
+    function drawPieChart(data1,title1,data2,title2,data3,title3) {
+        var myChart = echarts.init(document.getElementById('pieChart'));
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'horizontal',
+                left: 'center',
+                bottom: 0
+            },
+            series: [
+                {
+                    name:'报审进度', //内环
+                    type:'pie',
+                    selectedMode: 'single', //单一选中模式
+                    radius: [0, '50%'], //饼图的半径 [内半径，外半径]
+                    label: {
+                        normal: {
+                            position: 'inner' //内置文本标签
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false     //不需要设置引导线
+                        }
+                    },
+                    data:[
+
+                    ]
+                },
+                {
+                    name:'报审进度',
+                    type:'pie',
+                    radius: ['60%', '75%'],
+
+                    data:[
+                        {value:data1, name:title1},
+                        {value:data2, name:title2},
+                        {value:data3, name:title3}
+                    ]
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    $(function () {
+        GetBoothRegSummary();
+        GetAuditSummary();
+
+        $('#boothreg-type').change(function () {
+            GetBoothRegSummary();
+        });
+    })
+</script>
+</body>
+</html>

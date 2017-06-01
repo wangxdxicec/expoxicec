@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>中国·厦门会展金泓信展览</title>
+</head>
+
+<body class="skin-blue sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="${base}/user/admin/projectlist"><i class="fa fa-home"></i> 项目列表</a></li>
+                <li><a href="${base}/user/admin/userlist"><i class="fa fa-users"></i> 用户管理</a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper" style="min-height: 921px;">
+        <section class="content-header">
+            <h1>用户资料<small></small></h1>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="box box-widget widget-user-2">
+                        <div class="widget-user-header bg-blue">
+                            <h4>${tExpoXicecDetailInfo.username}</h4>
+                            <h5>${tExpoXicecDetailInfo.company}</h5>
+                        </div>
+
+                        <div class="box-footer no-padding">
+                            <table class="table">
+                                <tr>
+                                    <td>电话</td>
+                                    <td class="text-right">${tExpoXicecDetailInfo.mobilephone}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td class="text-right">${tExpoXicecDetailInfo.email}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>已发短信</td>
+                                    <td class="text-right">${tExpoXicecDetailInfo.msg_num}</td>
+                                </tr>
+                                <tr>
+                                    <td>创建时间</td>
+                                    <td class="text-right">${tExpoXicecDetailInfo.create_Time}</td>
+                                </tr>
+                                <tr>
+                                    <td>更新时间</td>
+                                    <td class="text-right">${tExpoXicecDetailInfo.update_Time}</td>
+                                </tr>
+                                <tr>
+                                    <td>状态</td>
+                                    <td class="text-right">
+                                        <#if tExpoXicecDetailInfo.status?exists && tExpoXicecDetailInfo.status== 0>未完成注册</#if>
+                                        <#if tExpoXicecDetailInfo.status?exists && tExpoXicecDetailInfo.status== 1>完成注册</#if>
+                                        <#if tExpoXicecDetailInfo.status?exists && tExpoXicecDetailInfo.status== 2>激活</#if>
+                                        <#if tExpoXicecDetailInfo.status?exists && tExpoXicecDetailInfo.status== 3>锁定</#if>
+                                        <#if tExpoXicecDetailInfo.status?exists && tExpoXicecDetailInfo.status== 4>禁用</#if>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>注册方式</td>
+                                    <td class="text-right">
+                                        <#if tExpoXicecDetailInfo.register_type?exists && tExpoXicecDetailInfo.register_type== 0>网页注册</#if>
+                                        <#if tExpoXicecDetailInfo.register_type?exists && tExpoXicecDetailInfo.register_type== 1>手机注册</#if>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>新手帮助</td>
+                                    <td class="text-right"><input class="check-box" disabled="disabled" type="checkbox" /></td>
+                                </tr>
+                                <tr>
+                                    <td>用户评级</td>
+                                    <td class="text-right">${tExpoXicecDetailInfo.vip}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="box-footer">
+                            <a class="btn btn-primary" href="${base}/user/admin/edit/userinfo.html?id=${tExpoXicecDetailInfo.id}">编辑</a>
+                            <a class="btn btn-default" href="${base}/user/admin/userlist">返回</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="box box-primary">
+                        <div class="box-header"><div class="box-title">进行中的项目</div></div>
+                        <div class="box-body no-padding">
+                            <table class="table table-hover">
+                                <tbody id="fair_info_data_body"></tbody>
+                                <#if fairInfoList?exists>
+                                    <#list fairInfoList as fairInfo>
+                                        <tr>
+                                            <td><a href="${base}/user/admin/fair/booth/listhead?telphone=${tExpoXicecDetailInfo.mobilephone}&fairid=${fairInfo.id}">${fairInfo.fair_name_alias}</a></td>
+                                            <td class="text-right">
+                                                <#if fairInfo.fair_enable== 1><span class="label label-success">可上传资料</span></#if>
+                                                <#if fairInfo.fair_enable== 2><span class="label label-danger">已截止上传</span></#if>
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                </#if>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    })
+</script>
+</body>
+</html>

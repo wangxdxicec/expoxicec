@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>中国·厦门会展金泓信展览</title>
+    <style>
+        .extra-property{
+            background: #ecf0f5;
+            float:right;
+
+        }
+    </style>
+</head>
+
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <#include "/user/expoxicec/admin/section_content.html" />
+    </aside>
+    <div class="content-wrapper" style="overflow:visible;" >
+        <section class="content-header">
+            <h1>修改展位信息<small><#if tExpoBuildInfo.booth_Number?exists>${tExpoBuildInfo.booth_Number}</#if></small></h1>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-primary">
+                        <div class="box-header"><div class="box-title">展位信息</div></div>
+                        <div class="box-body">
+                            <form action="${base}/user/admin/edit/booth" class="form-horizontal" method="post" id="formEditBooth">
+                                <#if tExpoXicecFair.id?exists>
+                                    <input data-val="true" data-val-required="BoothId 字段是必需的。" id="expoxicecId" name="expoxicecId" type="hidden" value="${tExpoXicecFair.id}" />
+                                </#if>
+                                <#if tFairInfo.id?exists>
+                                    <input data-val="true" data-val-required="BoothId 字段是必需的。" id="expoxicecFairId" name="expoxicecFairId" type="hidden" value="${tFairInfo.id}" />
+                                </#if>
+                                <#if tExpoBuildInfo.id?exists>
+                                    <input data-val="true" data-val-required="BoothId 字段是必需的。" id="expoxicecBuildId" name="expoxicecBuildId" type="hidden" value="${tExpoBuildInfo.id}" />
+                                </#if>
+                                <div class="box-body">
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label">展位类型</label>
+                                    <div class="col-md-8">
+                                        <#if tExpoBuildInfo.exhibitor_Type?exists>
+                                            <select class="form-control" data-val="true" data-val-number="字段 BoothTypeId 必须是一个数字。" data-val-required="BoothTypeId 字段是必需的。" id="boothTypeId" name="boothTypeId">
+                                                <option selected="selected" value="${tExpoBuildInfo.exhibitor_Type}">
+                                                    <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 1>标摊</#if>
+                                                    <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 2>特装</#if>
+                                                </option>
+                                                <!--<option value="1">标摊</option>
+                                                <option value="2">特装</option>-->
+                                            </select>
+                                            <#else>
+                                                <select class="form-control" data-val="true" data-val-number="字段 BoothTypeId 必须是一个数字。" data-val-required="BoothTypeId 字段是必需的。" id="boothTypeId" name="boothTypeId">
+                                                    <option value="1">标摊</option>
+                                                    <option value="2">特装</option>
+                                                </select>
+                                        </#if>
+                                        <p class="form-control-static hidden" id="boothTypeChangeWarning">
+                                            <span class="text-red"><i class="fa fa-warning"></i> 变更展位类型可能导致已有文档失效！（原展位类型：特装）</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">展位号</label>
+                                    <div class="col-md-8">
+                                        <#if tExpoBuildInfo.booth_Number?exists>
+                                            <input class="form-control" id="boothName" name="boothName" type="text" value="${tExpoBuildInfo.booth_Number}" />
+                                        <#else>
+                                            <input class="form-control" id="boothName" name="boothName" type="text" value="" />
+                                        </#if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">参展单位</label>
+                                    <div class="col-md-8">
+                                        <#if tExpoBuildInfo.exhibitor_Company?exists>
+                                            <input class="form-control" id="boothCompany" name="boothCompany" type="text" value="${tExpoBuildInfo.exhibitor_Company}" />
+                                        <#else>
+                                            <input class="form-control" id="boothCompany" name="boothCompany" type="text" value="" />
+                                        </#if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">面积</label>
+                                    <div class="col-md-8">
+                                        <#if tExpoBuildInfo.booth_area?exists>
+                                            <input class="form-control" data-val="true" data-val-number="字段 Area 必须是一个数字。" data-val-required="Area 字段是必需的。" id="boothArea" name="boothArea" type="text" value="${tExpoBuildInfo.booth_area}" />
+                                        <#else>
+                                            <input class="form-control" data-val="true" data-val-number="字段 Area 必须是一个数字。" data-val-required="Area 字段是必需的。" id="boothArea" name="boothArea" type="text" value="" />
+                                        </#if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">联系人</label>
+                                    <div class="col-md-8">
+                                        <#if tExpoXicecFair.username?exists>
+                                            <input class="form-control" id="expoxicecFairContact" name="expoxicecFairContact" type="text" value="${tExpoXicecFair.username}" />
+                                        <#else>
+                                            <input class="form-control" id="expoxicecFairContact" name="expoxicecFairContact" type="text" value="" />
+                                        </#if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">联系电话</label>
+                                    <div class="col-md-8">
+                                        <#if tExpoXicecFair.mobilephone?exists>
+                                            <input class="form-control" id="expoxicecFairMobile" name="expoxicecFairMobile" type="text" value="${tExpoXicecFair.mobilephone}" />
+                                        <#else>
+                                            <input class="form-control" id="expoxicecFairMobile" name="expoxicecFairMobile" type="text" value="" />
+                                        </#if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8 text-danger"><div class="validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li>
+                                    </ul></div></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <button type="button" class="btn btn-primary" id="btnBoothEdit">保存</button>
+                                        <#if tExpoBuildInfo.id?exists && tExpoXicecFair.mobilephone?exists && tFairInfo.id?exists>
+                                            <a class="btn btn-default" href="javascript:history.back(-1);">取消</a>
+                                        <#else>
+                                            <a class="btn btn-default" href="javascript:history.back(-1);">取消</a>
+                                        </#if>
+                                        <#if tExpoBuildInfo.id?exists>
+                                            <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target="#modalDelete">删除此展位</button>
+                                        </#if>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- 删除展位 -->
+                <div class="modal modal-danger fade" id="modalDelete">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title">删除展位</h4>
+                            </div>
+                            <div class="modal-body">
+                                <#if tExpoBuildInfo.booth_Number?exists>
+                                    <p>确定删除展位 ${tExpoBuildInfo.booth_Number} ？</p>
+                                <#else>
+                                    <p>确定删除展位？</p>
+                                </#if>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">取消</button>
+                                <#if tExpoBuildInfo.id?exists>
+                                    <form action="${base}/user/admin/exhibition/booth/delete" method="post">
+                                        <input data-val="true" data-val-required="id 字段是必需的。" id="expoBuildInfoId" name="expoBuildInfoId" type="hidden" value="${tExpoBuildInfo.id}" />
+                                        <button type="submit" class="btn btn-outline">确定删除</button>
+                                    </form>
+                                </#if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //changeSelectedBoothTypeId();
+    });
+
+    function changeSelectedBoothTypeId(){
+        jsSelectItemByValue(document.getElementById("boothTypeId"),${tExpoBuildInfo.exhibitor_Type!""});
+    }
+
+    function jsSelectItemByValue(objSelect,objItemText) {
+        for(var i=0;i<objSelect.options.length;i++) {
+            if(objSelect.options[i].value == objItemText) {
+                objSelect.options[i].selected = true;
+                break;
+            }
+        }
+    }
+
+    //修改展位信息
+    $('#btnBoothEdit').click(function (){
+        $("#formEditBooth").submit();
+    });
+
+    $('#BoothTypeId').change(function () {
+        $('#boothTypeChangeWarning').removeClass('hidden').addClass('show');
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>中国·厦门会展金泓信展览</title>
+    <style>
+        .extra-property{
+            background: #ecf0f5;
+            float:right;
+
+        }
+    </style>
+</head>
+
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <#include "/user/expoxicec/admin/section_content.html" />
+    </aside>
+    <div class="content-wrapper" style="overflow:visible;" >
+        <section class="content-header">
+            <h1>${tFairInfo.fair_name}<small></small></h1>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="box box-widget widget-user-2">
+                        <div class="widget-user-header bg-blue">
+                            <h4>${tExpoXicecFair.username}</h4>
+                            <h5>${tExpoXicecFair.company}</h5>
+                        </div>
+
+                        <div class="box-footer no-padding">
+                            <table class="table">
+                                <tr>
+                                    <td>电话</td>
+                                    <td class="text-right">${tExpoXicecFair.mobilephone}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td class="text-right">${tExpoXicecFair.email}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>已发短信</td>
+                                    <td class="text-right">${tExpoXicecFair.msg_num}</td>
+                                </tr>
+                                <tr>
+                                    <td>创建时间</td>
+                                    <td class="text-right">${tExpoXicecFair.create_Time}</td>
+                                </tr>
+                                <tr>
+                                    <td>更新时间</td>
+                                    <td class="text-right">${tExpoXicecFair.update_Time}</td>
+                                </tr>
+                                <tr>
+                                    <td>状态</td>
+                                    <td class="text-right">
+                                        <#if tExpoXicecFair.status?exists && tExpoXicecFair.status== 0>未完成注册</#if>
+                                        <#if tExpoXicecFair.status?exists && tExpoXicecFair.status== 1>完成注册</#if>
+                                        <#if tExpoXicecFair.status?exists && tExpoXicecFair.status== 2>激活</#if>
+                                        <#if tExpoXicecFair.status?exists && tExpoXicecFair.status== 3>锁定</#if>
+                                        <#if tExpoXicecFair.status?exists && tExpoXicecFair.status== 4>禁用</#if>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>注册方式</td>
+                                    <td class="text-right">
+                                        <#if tExpoXicecFair.register_type?exists && tExpoXicecFair.register_type== 0>网页注册</#if>
+                                        <#if tExpoXicecFair.register_type?exists && tExpoXicecFair.register_type== 1>手机注册</#if>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>新手帮助</td>
+                                    <td class="text-right"><input class="check-box" disabled="disabled" type="checkbox" /></td>
+                                </tr>
+                                <tr>
+                                    <td>用户评级</td>
+                                    <td class="text-right">${tExpoXicecFair.vip}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="box-body"><a href="${base}/user/admin/userinfo/details.html?telphone=${tExpoXicecFair.mobilephone}" class="btn btn-default">返回</a></div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <#include "/user/expoxicec/addboothtemplate.html" />
+                </div>
+            <script type="text/template" id="template-tr">
+                <tr>
+                    <td style="width:6em;">{{STATUS}}</td>
+                    <td style="display: inline-block;word-break: break-word; overflow:hidden; text-overflow:ellipsis">
+                        <a href="/Admin/Booth/Details/{{BOOTHID}}">{{NAME}}</a>
+                    </td>
+                    <td>{{TYPE}}</td>
+                    <td>{{AREA}}</td>
+                </tr>
+            </script>
+        </section>
+    </div>
+    <div style="overflow: hidden;clear: both;background:#ecf0f5;padding: 5px 10px;">
+        <div class="dataTables_info" style="float:left;margin: 20px 0;" role="status" aria-live="polite">共 <label id="totalSumPage"></label> 页 <label id="totalSumValue"></label> 条记录</div>
+        <div id="pagination" class="pagination extra-property"></div>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var fairId = window.location.href.split('?')[1];
+        $('#booths').hide();
+        $.ajax({
+            url: '${base}/user/admin/fair/booth/listinfo',
+            type: 'post',
+            dataType: "json",
+            data: {"fairId": fairId},
+            success: function (e) {
+                if(e.tFairInfoList != null){
+                    var fairInfoList = JSON.parse(e.tFairInfoList);
+                    if(fairInfoList.length>0){
+                        var template = $('#template-tr').html();
+                        var html = '';
+                        for (var i = 0; i < fairInfoList.length; i++) {
+                            var typeValue = "";
+                            var statusValue = "";
+                            if(1 == fairInfoList[i].exhibitor_Type){
+                                typeValue = "标摊";
+                            }else if(2 == fairInfoList[i].exhibitor_Type){
+                                typeValue = "特装";
+                            }
+                            if(1 == fairInfoList[i].current_Audit_Status){
+                                statusValue = "上传材料";
+                            }else if(2 == fairInfoList[i].current_Audit_Status){
+                                statusValue = "提交审核";
+                            }else if(3 == fairInfoList[i].current_Audit_Status){
+                                statusValue = "审核通过";
+                            }else if(4 == fairInfoList[i].current_Audit_Status){
+                                statusValue = "审核不通过";
+                            }
+                            html += template.replace(/\{{NAME}}/g, fairInfoList[i].booth_Number)
+                                .replace(/\{{TYPE}}/g, typeValue)
+                                .replace(/\{{BOOTHID}}/g, fairInfoList[i].booth_Number)
+                                .replace(/\{{AREA}}/g, fairInfoList[i].booth_area)
+                                .replace(/\{{STATUS}}/g, statusValue);
+                        }
+                        $('#booth-summary>tr>td').text('共 ' + fairInfoList.length + ' 个（组）展位');
+                        $('#booths').show().find('tbody').html(html);
+                        $('#loadresult').hide();
+                    }else{
+                        $('#booths').hide();
+                        $('#loadresult').html('<i class="fa fa-minus-circle"></i> 用户在此展会中没有相关展位');
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

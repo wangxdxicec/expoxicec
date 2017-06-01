@@ -1,0 +1,335 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>中国·厦门会展金泓信展览</title>
+    <!--<script src="${base}/resource/expoxicec/admin/ckeditor.js" type="text/javascript"></script>-->
+</head>
+
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+
+    <aside class="main-sidebar">
+        <#include "/user/expoxicec/admin/section_content.html" />
+    </aside>
+
+    <div class="content-wrapper" style="min-height: 308px;">
+        <section class="content-header">
+            <h1>项目配置<small></small></h1>
+        </section>
+
+        <section class="content">
+            <p><a class="btn btn-default" href="${base}/user/admin/project/details?fairid=fairid-${tFairInfo.id}"><i class="fa fa-reply"></i> 返回项目主页</a></p>
+            <link href="${base}/resource/expoxicec/css/StepWizard.css" rel="stylesheet"/>
+            <form action="${base}/user/admin/project/edit" method="post" id="formEditProject" role="form" enctype="multipart/form-data">
+                <input data-val="true" data-val-required="ProjectId 字段是必需的。" id="projectId" name="projectId" type="hidden" value="${tFairInfo.id!""}"/>
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_basic" data-toggle="tab">基本信息</a></li>
+                        <li><a href="#tab_notice" data-toggle="tab">通知公告</a></li>
+                        <li><a href="#tab_personalize" data-toggle="tab">个性化</a></li>
+                        <li class="pull-right"><a href="#"><i class="fa fa-gear"></i>展位设置</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_basic">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>项目名称</label>
+                                        <input class="form-control" id="projectname" name="projectname" type="text" value="${tFairInfo.fair_name_alias!""}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>组委会</label>
+                                        <input class="form-control" id="organization" name="organization" type="text" value="${tFairInfo.fair_organization!""}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>开始时间</label>
+                                        <input class="form-control" data-val="true" data-val-date="字段 BeginDate 必须是日期。"
+                                               data-val-required="BeginDate 字段是必需的。" id="beginDate" name="beginDate"
+                                               type="text" value="${tFairInfo.fair_begin_time!""}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>结束时间</label>
+                                        <input class="form-control" data-val="true" data-val-date="字段 EndDate 必须是日期。"
+                                               data-val-required="EndDate 字段是必需的。" id="endDate" name="endDate"
+                                               type="text" value="${tFairInfo.fair_end_time!""}"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>状态</label>
+                                        <select class="form-control" data-val="true" data-val-required="Status 字段是必需的。" id="status" name="status">
+                                            <option value="0">停用</option>
+                                            <option value="1">可上传资料</option>
+                                            <option value="2">已截止上传</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>创建展位</label>
+                                        <select class="form-control" data-val="true"
+                                                data-val-required="BoothCreateMethod 字段是必需的。" id="boothCreateMethod"
+                                                name="boothCreateMethod">
+                                            <option value="0">任意创建</option>
+                                            <option value="1">单个展位模板</option>
+                                            <option value="2">多个展位模板</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>展位提示字符</label>
+                                        <input class="form-control" data-val="true"
+                                               data-val-number="字段 BoothHintMinimumInputLength 必须是一个数字。"
+                                               data-val-required="BoothHintMinimumInputLength 字段是必需的。"
+                                               id="boothHintMinimumInputLength" name="boothHintMinimumInputLength"
+                                               type="text" value="${tFairInfo.fair_booth_hint_input_length!""}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>自定义登陆页</label>
+                                        <input class="form-control" id="extendLoginUrl" name="extendLoginUrl"
+                                               type="text" value="${tFairInfo.fair_extend_login_url!""}"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>展位号</label>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input data-val="true"
+                                                       data-val-required="BoothNameAutoCapitalization 字段是必需的。"
+                                                       id="boothNameAutoCapitalization"
+                                                       name="boothNameAutoCapitalization" type="checkbox"
+                                                       onclick="boothNameAutoCapitalizationChange(this)" value="${tFairInfo.fair_booth_name_auto_capitalization!""}"/>
+                                                <input name="boothNameAutoCapitalizationValue" type="hidden" />
+                                                展位号自动大写
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>企业名称</label>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input data-val="true" data-val-required="UseTemplateCompany 字段是必需的。"
+                                                       id="useTemplateCompany" name="useTemplateCompany" type="checkbox"
+                                                       onclick="useTemplateCompanyChange(this)" value="${tFairInfo.fair_use_template_company!""}"/>
+                                                <input name="useTemplateCompanyValue" type="hidden"/>
+                                                客户不可修改公司名称
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>审核短信</label>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input data-val="true" data-val-required="SendAuditSMS 字段是必需的。"
+                                                       id="sendAuditSMS" name="sendAuditSMS" type="checkbox"
+                                                       onclick="sendAuditSMSChange(this)" value="${tFairInfo.fair_send_audit_sms!""}"/>
+                                                <input name="sendAuditSMSValue" type="hidden"/>
+                                                默认发送审核短信
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>短信内容</label>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input data-val="true" data-val-required="SMSShowOrgSign 字段是必需的。"
+                                                       id="sMSShowOrgSign" name="sMSShowOrgSign" type="checkbox"
+                                                       onclick="sMSShowOrgSignChange(this)" value="${tFairInfo.fair_sms_show_org_sign!""}"/>
+                                                <input name="sMSShowOrgSignValue" type="hidden"/>
+                                                短信末尾显示组委会名称
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <hr/>
+                            <p>
+                                <button type="button" class="btn btn-primary" id="btnEditProject">保存</button>
+                                <a class="btn btn-default" href="${base}/user/admin/projectlist">取消</a>
+                            </p>
+                        </div>
+                        <!--通知公告-->
+                        <div class="tab-pane" id="tab_notice">
+                            <textarea class="form-control" cols="20" id="notice" name="notice" rows="20"></textarea>
+                            <hr/>
+                            <p>
+                                <button type="submit" class="btn btn-primary">保存</button>
+                                <button type="reset" class="btn btn-default">取消</button>
+                            </p>
+                        </div>
+                        <!--个性化-->
+                        <div class="tab-pane" id="tab_personalize">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>页眉样式</label>
+                                    <textarea class="form-control" cols="20" id="userPageHeader" name="userPageHeader"
+                                              placeholder="插入用户界面顶部的 HTML 脚本" rows="20"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>扩展脚本</label>
+                                    <textarea class="form-control" cols="20" id="extendUserPageScript"
+                                              name="extendUserPageScript" placeholder="插入用户界面底部的 JS 脚本" rows="20"></textarea>
+                                </div>
+                            </div>
+                            <hr/>
+                            <p>
+                                <button type="submit" class="btn btn-primary">保存</button>
+                                <button type="reset" class="btn btn-default">取消</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="modal modal-danger fade" id="modalClearDirectory">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title">清理文档</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>清理服务器上 aaaa 目录下无效的文档！</p>
+                            <p>该操作执行后不可撤销，是否继续？</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="/Admin/Project/ClearDirectory" method="post">
+                                <input type="hidden" name="projectId" value=""/>
+                                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-outline">确定清理</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 3.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script>
+    $(document).ready(function () {
+        changeSelectedStatus();
+        changeSelectedBoothCreateMethod();
+        changeSelectedBoothNameAutoCapitalization();
+        changeSelectedUseTemplateCompany();
+        changeSelectedSendAuditSMS();
+        changeSelectedSMSShowOrgSign();
+    });
+
+    function changeSelectedStatus(){
+        jsSelectItemByValue(document.getElementById("status"),${tFairInfo.fair_enable!""});
+    }
+
+    function changeSelectedBoothCreateMethod(){
+        jsSelectItemByValue(document.getElementById("boothCreateMethod"),${tFairInfo.fair_booth_create_method!""});
+    }
+
+    function jsSelectItemByValue(objSelect,objItemText) {
+        for(var i=0;i<objSelect.options.length;i++) {
+            if(objSelect.options[i].value == objItemText) {
+                objSelect.options[i].selected = true;
+                break;
+            }
+        }
+    }
+
+    function changeSelectedBoothNameAutoCapitalization(){
+        jsSelectCheckBoxByValue(document.getElementsByName("boothNameAutoCapitalization"),${tFairInfo.fair_booth_name_auto_capitalization!""});
+    }
+
+    function changeSelectedUseTemplateCompany(){
+        jsSelectCheckBoxByValue(document.getElementsByName("useTemplateCompany"),${tFairInfo.fair_use_template_company!""});
+    }
+
+    function changeSelectedSendAuditSMS(){
+        jsSelectCheckBoxByValue(document.getElementsByName("sendAuditSMS"),${tFairInfo.fair_send_audit_sms!""});
+    }
+
+    function changeSelectedSMSShowOrgSign(){
+        jsSelectCheckBoxByValue(document.getElementsByName("sMSShowOrgSign"),${tFairInfo.fair_sms_show_org_sign!""});
+    }
+
+    function jsSelectCheckBoxByValue(objCheckbox,objItemText){
+        if(1 == objItemText){
+            for(var i=0;i<objCheckbox.length;i++) {
+                objCheckbox[i].checked = true;
+                break;
+            }
+        }else{
+            for(var i=0;i<objCheckbox.length;i++) {
+                objCheckbox[i].checked = false;
+                break;
+            }
+        }
+    }
+
+    $('#btnEditProject').click(function (){
+        $("#formEditProject").submit();
+    });
+
+    function boothNameAutoCapitalizationChange(obj) {
+        document.getElementById("boothNameAutoCapitalization").value = obj.checked?"1":"0";
+        document.getElementById("boothNameAutoCapitalizationValue").value = obj.checked?"1":"0";
+    }
+
+    function useTemplateCompanyChange(obj) {
+        document.getElementById("useTemplateCompany").value = obj.checked?"1":"0";
+        document.getElementById("useTemplateCompanyValue").value = obj.checked?"1":"0";
+    }
+
+    function sendAuditSMSChange(obj) {
+        document.getElementById("sendAuditSMS").value = obj.checked?"1":"0";
+        document.getElementById("sendAuditSMSValue").value = obj.checked?"1":"0";
+    }
+
+    function sMSShowOrgSignChange(obj) {
+        document.getElementById("sMSShowOrgSign").value = obj.checked?"1":"0";
+        document.getElementById("sMSShowOrgSignValue").value = obj.checked?"1":"0";
+    }
+
+    $.ajax({
+        url: '${base}/user/admin/project/list',
+        type: 'post',
+        dataType: "json",
+        success: function (e) {
+            var template = $('#template-nav-project-item').html();
+            var html = '';
+            if(e.tFairInfoList != null){
+                var fairInfoList = JSON.parse(e.tFairInfoList);
+                for(var i=0;i<fairInfoList.length;i++){
+                    html += template.replace('{{NAME}}', fairInfoList[i].fair_name_alias).replace('{{ID}}', 'admin/project/fair_details/' + fairInfoList[i].id);
+                }
+                $('#nav-project-count').text(fairInfoList.length);
+            }else{
+                $('#nav-project-count').empty();
+                html = template
+                    .replace('{{NAME}}', '')
+                    .replace('{{ID}}', '#');
+            }
+            $('#nav-projectlist').html(html);
+        }
+    });
+/*
+    $(function () {
+        CKEDITOR.replace('notice');
+    });*/
+</script>
+</body>
+</html>

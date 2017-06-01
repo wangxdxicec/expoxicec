@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>中国·厦门会展金泓信展览</title>
+</head>
+
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <#include "/user/expoxicec/admin/section_content.html" />
+    </aside>
+    <div class="content-wrapper" style="overflow:visible;" >
+        <section class="content-header">
+            <h1>${tFairInfo.fair_name}<small>添加展位类型</small></h1>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <div class="box-title">展位信息</div>
+                        </div>
+                        <div class="box-body">
+                            <form action="${base}/user/admin/exhibition/type/create" class="form-horizontal" method="post">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">展位名称</label>
+                                        <div class="col-md-8">
+                                            <input class="form-control" id="exhibitionName" name="exhibitionName" type="text" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">排序</label>
+                                        <div class="col-md-8">
+                                            <input class="form-control" data-val="true" data-val-number="字段 Sort 必须是一个数字。" data-val-required="Sort 字段是必需的。"
+                                                   id="exhibitionSort" name="exhibitionSort" type="text" value="1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-8 text-danger">
+                                            <div class="validation-summary-valid" data-valmsg-summary="true">
+                                                <ul>
+                                                    <li style="display:none"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-8">
+                                            <button type="submit" class="btn btn-primary">保存</button>
+                                            <a class="btn btn-default" onclick="history.go(-1)">取消</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#uploadDocumentTypeTemplateBtn').click(function (){
+            var fileTemplate = document.getElementById("fileTemplate").value;
+            $.ajaxFileUpload({
+                url:'../../../admin/document/type/upload/template',
+                dataType: 'text/html',
+                fileElementId:'fileTemplate',
+                success: function (data){
+                    $('#modalUploadTemplate').modal('hide');
+                    document.getElementById("documentTemplate").value = data.substring(1,data.length-1);
+                },
+                error: function (data){
+                    $.messager.alert('错误', data);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

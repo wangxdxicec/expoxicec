@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>中国·厦门会展金泓信展览</title>
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/_all_skin.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/AdminLTE.min.css">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="${base}/resource/expoxicec/css/Site.css">
+
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="${base}/resource/expoxicec/admin/html5shiv.min.js"></script>
+    <script type="text/javascript" src="${base}/resource/expoxicec/admin/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="${base}/resource/expoxicec/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="${base}/resource/expoxicec/admin/app.min.js" type="text/javascript"></script>
+</head>
+
+<body class="skin-blue sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="${base}/user/admin/projectlist"><i class="fa fa-home"></i> 项目列表</a></li>
+                <li><a href="${base}/user/admin/userlist"><i class="fa fa-users"></i> 用户管理</a></li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper" style="min-height: 921px;">
+        <section class="content-header">
+            <h1>新建项目<small></small></h1>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <div class="box-title">项目信息</div>
+                        </div>
+                        <form action="${base}/user/admin/project/create" id="formCreateProject" class="form-horizontal" method="post" role="form" enctype="multipart/form-data">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">项目名称</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="projectname" name="projectname" type="text" value=""/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">组委会</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="organization" name="organization" type="text" value=""/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">开始时间</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" data-val="true" data-val-date="字段 BeginDate 必须是日期。"
+                                               data-val-required="BeginDate 字段是必需的。" id="beginDate" name="beginDate"
+                                               type="text" value=""/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">结束时间</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" data-val="true" data-val-date="字段 EndDate 必须是日期。"
+                                               data-val-required="EndDate 字段是必需的。" id="endDate" name="endDate"
+                                               type="text" value=""/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">创建展位</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" data-val="true"
+                                                data-val-required="BoothCreateMethod 字段是必需的。" id="boothCreateMethod"
+                                                name="boothCreateMethod">
+                                            <option selected="selected" value="0">任意创建</option>
+                                            <option value="1">单个展位模板</option>
+                                            <option value="2">多个展位模板</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">审核短信</label>
+                                    <div class="col-md-9 checkbox">
+                                        <label>
+                                            <input data-val="true" data-val-required="SendAuditSMS 字段是必需的。"
+                                                   id="sendAuditSMS" name="SendAuditSMS" type="checkbox"
+                                                   value="true"/><input name="sendAuditSMS" type="hidden" value="false"/>
+                                            默认发送审核短信
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <p class="form-control-static text-danger">
+                                        <div class="validation-summary-valid" data-valmsg-summary="true">
+                                            <ul><li style="display:none"></li></ul>
+                                        </div>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <p id="CreateProjectSummary" class="text-danger"></p>
+                                        <button type="button" class="btn btn-primary" id="btnCreateProject">保存</button>
+                                        <a class="btn btn-default" href="${base}/user/admin/projectlist">返回</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var today = new Date();
+        today.setTime(today.getTime()+24*60*60*1000);
+        var beginDate = today.getFullYear()+"-" + (today.getMonth()+1) + "-" + today.getDate() + " 0:00:00";
+        document.getElementById('beginDate').value = beginDate;
+
+        today = new Date();
+        today.setTime(today.getTime()+10*24*60*60*1000);
+        var endDate = today.getFullYear()+"-" + (today.getMonth()+1) + "-" + today.getDate() + " 0:00:00";
+        document.getElementById('endDate').value = endDate;
+
+        $("#resetpassword").click(function () {
+            location.href = "${resource}/expoxicechtml/modifyPassword.html";
+        });
+
+        $('#btnCreateProject').click(function (){
+            var form = $('#formCreateProject');
+            var projectname = form.find('[name="projectname"]').val();
+            var organization = form.find('[name="organization"]').val();
+            var beginDate = form.find('[name="beginDate"]').val();
+            var endDate = form.find('[name="endDate"]').val();
+            var beginValue = new Date(beginDate.replace(/\-/g, "\/"));
+            var endValue = new Date(endDate.replace(/\-/g, "\/"));
+            if (projectname == '') {
+                $('#CreateProjectSummary').text('项目名称不能为空');
+                return;
+            }
+            if (organization == '') {
+                $('#CreateProjectSummary').text('组委会不能为空');
+                return;
+            }
+            if (beginValue != "" && endValue != "" && beginValue >= endValue) {
+                $('#CreateProjectSummary').text('开始时间不能大于结束时间');
+                return;
+            }
+            $("#formCreateProject").submit();
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,888 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>中国·厦门会展金泓信展览</title>
+    <style>
+        .extra-property{
+            background: #ecf0f5;
+            float:right;
+
+        }
+    </style>
+</head>
+
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <#include "/user/expoxicec/admin/section_content.html" />
+    </aside>
+    <div class="content-wrapper" style="overflow:visible;" >
+        <section class="content-header">
+            <h1>${tFairInfo.fair_name}
+                <small>
+                    <#if tExpoBuildInfo?exists>${tExpoBuildInfo.booth_Number}
+                        <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 1>[标摊]</#if>
+                        <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 2>[特装]</#if>
+                    </#if>
+                </small></h1>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="box box-primary">
+                        <div class="box-body box-profile">
+                            <h3 class="profile-username text-center text-ellipsis"><#if tExpoBuildInfo.booth_Number?exists>${tExpoBuildInfo.booth_Number}</#if></h3>
+                            <p class="text-muted text-center">
+                                <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 1>标摊</#if>
+                                <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 2>特装</#if>
+                            </p>
+                            <p class="text-muted text-center"></p>
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>审核状态</b>
+                                    <a class="pull-right">
+                                        <#if tExpoBuildInfo.current_Audit_Status?exists && tExpoBuildInfo.current_Audit_Status== 1><span class="label label-default">上传资料</span></#if>
+                                        <#if tExpoBuildInfo.current_Audit_Status?exists && tExpoBuildInfo.current_Audit_Status== 2><span class="label label-info">提交审核</span></#if>
+                                        <#if tExpoBuildInfo.current_Audit_Status?exists && tExpoBuildInfo.current_Audit_Status== 3><span class="label label-success">审核通过</span></#if>
+                                        <#if tExpoBuildInfo.current_Audit_Status?exists && tExpoBuildInfo.current_Audit_Status== 4><span class="label label-danger">审核不通过</span></#if>
+                                    </a>
+                                </li>
+                                <li class="list-group-item"><b>面积</b> <a class="pull-right"><#if tExpoBuildInfo.booth_area?exists>${tExpoBuildInfo.booth_area}</#if></a></li>
+                                <li class="list-group-item"><b>联系人</b> <a class="pull-right"><#if tExpoXicecFair.username?exists>${tExpoXicecFair.username}</#if></a></li>
+                                <li class="list-group-item"><b>联系电话</b> <a class="pull-right"><#if tExpoXicecFair.mobilephone?exists>${tExpoXicecFair.mobilephone}</#if></a></li>
+                            </ul>
+                            <a class="btn btn-primary btn-block" href="${base}/user/admin/fair/booth/edit?boothid=${tExpoBuildInfo.id}&telphone=${tExpoXicecFair.mobilephone}&fairid=${tFairInfo.id}">修改展位信息</a>
+                            <a href="${base}/user/admin/fair/booth/list/page?boothid=${tExpoBuildInfo.id}&telphone=${tExpoXicecFair.mobilephone}&fairid=${tFairInfo.id}" class="btn btn-default btn-block">返回</a>
+                        </div>
+                    </div>
+
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <p class="text-muted text-center">用户信息</p>
+                        </div>
+                        <div class="box-body box-profile">
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item"><b>姓名</b> <a class="pull-right"><#if tExpoXicecFair.username?exists>${tExpoXicecFair.username}</#if></a></li>
+                                <li class="list-group-item"><b>电话</b> <a class="pull-right"><#if tExpoXicecFair.mobilephone?exists>${tExpoXicecFair.mobilephone}</#if></a></li>
+                                <li class="list-group-item"><b>邮箱</b> <a class="pull-right"><#if tExpoXicecFair.email?exists>${tExpoXicecFair.email}</#if></a></li>
+                                <li class="list-group-item"><b>单位</b> <a class="pull-right"><#if tExpoXicecFair.company?exists>${tExpoXicecFair.company}</#if></a></li>
+                                <li class="list-group-item"><b>评级</b> <a class="pull-right"><span class="label label-primary"><#if tExpoXicecFair.vip?exists>${tExpoXicecFair.vip}</#if></span></a></li>
+                            </ul>
+                            <a href="${base}/user/admin/fair/booth/listhead?telphone=${tExpoXicecFair.mobilephone}&fairid=${tFairInfo.id}" class="btn btn-default btn-block"><i class="fa fa-link"></i> 相关展位</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class=""><a href="#tab_1" data-toggle="tab">展位资料</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab">审核历史</a></li>
+                            <li class=""><a href="#tab_3" data-toggle="tab">关联展位</a></li>
+                            <li class=""><a href="#tab_4" data-toggle="tab">展位信息</a></li>
+                            <li class=""><a href="#tab_5" data-toggle="tab">用户信息</a></li>
+                        </ul>
+
+                        <div class="tab-content margin-bottom">
+                            <!-- 展位资料 -->
+                            <div class="tab-pane active" id="tab_1">
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="box-group" id="accordion">
+                                            <div id="panel-documenttype1" class="panel box box-primary panel-documenttype1">
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="collapsed pull-left">
+                                                            申报展位对应的《展览会责任险》保单
+                                                        </a>
+                                                    </h4>
+                                                    <div class="pull-right">
+                                                        <span class="badge bg-gray badge-documentcount1" title="申报展位对应的《展览会责任险》保单"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapse1" class="panel-collapse collapse in" aria-expanded="false">
+                                                    <div class="box-body clearfix">
+                                                        <p class="margin-bottom h5">
+                                                            备注：展览会责任险包括：1、展览场所建筑物自身、各种固定设备及地面、地基的损失等；2、雇请工作人员因意外人身伤害所引起的抚恤金、医疗费和其它有关费用；3、第三者的人身意外伤害所引起的抚恤金、医疗费和其它有关费用。</p>
+                                                        <div class="row" id="group_1">
+                                                            <!-- 上传组件 -->
+                                                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                                                                <form action="${base}/user/uploadImage" class="form-upload" name="uploadImageForm1" id="uploadImageForm1" enctype="multipart/form-data" method="post">
+                                                                    <input type="hidden" name="type" value="申报展位对应的《展览会责任险》保单"/>
+                                                                    <input type="hidden" name="BoothId" id="boothIdValue1"/>
+                                                                    <input type="hidden" name="tempId" value="1"/>
+                                                                    <div class="document-item btn-adddocument" title="上传申报展位对应的《展览会责任险》保单">
+                                                                        <i class="fa fa-plus fa-2x"></i>
+                                                                        <div class="filerequire">请上传小于 5M 的 .jpg,.png 文件</div>
+                                                                        <input type="file" class="hidden-fileinput" id="fileUpload" name="fileUpload"/>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="panel-documenttype2" class="panel box box-primary panel-documenttype2">
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed pull-left">
+                                                            布展委托函
+                                                            <small><span class="label label-default">必选</span></small>
+                                                        </a>
+                                                    </h4>
+                                                    <div class="pull-right">
+                                                        <span class="badge bg-gray badge-documentcount2" title="布展委托函"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapse2" class="panel-collapse collapse" style="height: 0px;">
+                                                    <div class="box-body clearfix">
+                                                        <p class="margin-bottom h5">备注：参展单位出具的布展委托函，须加盖参展单位公章</p>
+                                                        <div class="row" id="group_2">
+                                                            <!-- 上传组件 -->
+                                                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                                                                <form action="${base}/user/uploadImage" class="form-upload" name="uploadImageForm2" id="uploadImageForm2" enctype="multipart/form-data" method="post">
+                                                                    <input type="hidden" name="Type" value="布展委托函"/>
+                                                                    <input type="hidden" name="BoothId" id="boothIdValue2"/>
+                                                                    <input type="hidden" name="TempId" value="2"/>
+                                                                    <div class="document-item btn-adddocument" title="上传布展委托函">
+                                                                        <i class="fa fa-plus fa-2x"></i>
+                                                                        <div class="filerequire">请上传小于 5M 的 .jpg,.png 文件</div>
+                                                                        <input type="file" class="hidden-fileinput" id="fileUpload" name="fileUpload"/>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="panel-documenttype3" class="panel box box-primary panel-documenttype3">
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed pull-left">
+                                                            授权委托书
+                                                            <small><span class="label label-default">必选</span></small>
+                                                        </a>
+                                                    </h4>
+                                                    <div class="pull-right">
+                                                        <span class="badge bg-gray badge-documentcount3" title="授权委托书"></span>
+                                                        <a href="http://www.stonefair.org.cn/down/tempfolder/2016/2017厦门石材展授权委托书(施工单位签署）.doc" title="下载授权委托书模版" style="margin-left:1em;" target="_blank"><i class="fa fa-download"></i>下载模版</a></div>
+                                                </div>
+                                                <div id="collapse3" class="panel-collapse collapse" style="height: 0px;">
+                                                    <div class="box-body clearfix">
+                                                        <p class="margin-bottom h5">备注：搭建公司授权代理人办理此报图流程的必须提供此委托书（须盖公章）</p>
+                                                        <div class="row" id="group_3">
+                                                            <!-- 上传组件 -->
+                                                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                                                                <form action="${base}/user/uploadImage" class="form-upload" name="uploadImageForm3" id="uploadImageForm3" enctype="multipart/form-data" method="post">
+                                                                    <input type="hidden" name="Type" value="授权委托书"/>
+                                                                    <input type="hidden" name="BoothId" id="boothIdValue3"/>
+                                                                    <input type="hidden" name="TempId" value="3"/>
+                                                                    <div class="document-item btn-adddocument" title="上传授权委托书">
+                                                                        <i class="fa fa-plus fa-2x"></i>
+                                                                        <div class="filerequire">请上传小于 5M 的 .jpg,.png 文件</div>
+                                                                        <input type="file" class="hidden-fileinput" id="fileUpload" name="fileUpload"/>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="panel-documenttype4" class="panel box box-primary panel-documenttype4">
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="collapsed pull-left">
+                                                            搭建单位相关资料
+                                                            <small><span class="label label-default">必选</span></small>
+                                                        </a>
+                                                    </h4>
+                                                    <div class="pull-right">
+                                                        <span class="badge bg-gray badge-documentcount4" title="搭建单位相关资料"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapse4" class="panel-collapse collapse" style="height: 0px;">
+                                                    <div class="box-body clearfix">
+                                                        <p class="margin-bottom h5">备注：营业执照副本复印件、资质证书复印件（须盖公章）</p>
+                                                        <div class="row" id="group_4">
+                                                            <!-- 上传组件 -->
+                                                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                                                                <form action="${base}/user/uploadImage" class="form-upload" name="uploadImageForm4" id="uploadImageForm4" enctype="multipart/form-data" method="post">
+                                                                    <input type="hidden" name="Type" value="搭建单位相关资料"/>
+                                                                    <input type="hidden" name="BoothId" id="boothIdValue4"/>
+                                                                    <input type="hidden" name="TempId" value="4"/>
+                                                                    <div class="document-item btn-adddocument" title="上传搭建单位相关资料">
+                                                                        <i class="fa fa-plus fa-2x"></i>
+                                                                        <div class="filerequire">请上传小于 5M 的 .jpg,.png 文件</div>
+                                                                        <input type="file" class="hidden-fileinput" id="fileUpload" name="fileUpload"/>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="panel-documenttype5" class="panel box box-primary panel-documenttype5">
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" class="collapsed pull-left">
+                                                            特装展位相关图纸
+                                                            <small><span class="label label-default">必选</span></small>
+                                                        </a>
+                                                    </h4>
+                                                    <div class="pull-right">
+                                                        <span class="badge bg-gray badge-documentcount5" title="特装展位相关图纸"></span>
+                                                        <a href="http://www.stonefair.org.cn/down/TempFolder/2016/示意图.png" title="下载特装展位相关图纸模版" style="margin-left:1em;" target="_blank"><i class="fa fa-download"></i> 下载模版</a></div>
+                                                </div>
+                                                <div id="collapse5" class="panel-collapse collapse" style="height: 0px;">
+                                                    <div class="box-body clearfix">
+                                                        <p class="margin-bottom h5">
+                                                            备注：请分别单张上传：展位立体彩色效果图、立面网格图、平面图、施工图、电路图、施工材质说明图、结构图（需标注施工材质型号及连接方式）。要求清晰完整（上传时可点击左下角“使用原图上传”提高清晰度），电路图需标注回路、负载、所用材质的规格及型号等（设计师签名并盖章）</p>
+                                                        <div class="row" id="group_5">
+                                                            <!-- 上传组件 -->
+                                                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                                                                <form action="${base}/user/uploadImage" class="form-upload" name="uploadImageForm5" id="uploadImageForm5" enctype="multipart/form-data" method="post">
+                                                                    <input type="hidden" name="Type" value="特装展位相关图纸"/>
+                                                                    <input type="hidden" name="BoothId" id="boothIdValue5"/>
+                                                                    <input type="hidden" name="TempId" value="5"/>
+                                                                    <div class="document-item btn-adddocument" title="上传特装展位相关图纸">
+                                                                        <i class="fa fa-plus fa-2x"></i>
+                                                                        <div class="filerequire">请上传小于 5M 的 .jpg,.png 文件</div>
+                                                                        <input type="file" class="hidden-fileinput" id="fileUpload" name="fileUpload"/>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="panel-documenttype6" class="panel box box-primary panel-documenttype6">
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" class="collapsed pull-left">
+                                                            搭建材料检验报告
+                                                            <small><span class="label label-default">必选</span></small>
+                                                        </a>
+                                                    </h4>
+                                                    <div class="pull-right">
+                                                        <span class="badge bg-gray badge-documentcount6" title="搭建材料检验报告"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapse6" class="panel-collapse collapse" style="height: 0px;">
+                                                    <div class="box-body clearfix">
+                                                        <p class="margin-bottom h5">备注：搭建装饰材料防火等级证书、电气设备（3C认证）标准合格证</p>
+                                                        <div class="row" id="group_6">
+                                                            <!-- 上传组件 -->
+                                                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                                                                <form action="${base}/user/uploadImage" class="form-upload" name="uploadImageForm6" id="uploadImageForm6" enctype="multipart/form-data" method="post">
+                                                                    <input type="hidden" name="Type" value="搭建材料检验报告"/>
+                                                                    <input type="hidden" name="BoothId" id="boothIdValue6"/>
+                                                                    <input type="hidden" name="TempId" value="6"/>
+                                                                    <div class="document-item btn-adddocument" title="上传搭建材料检验报告">
+                                                                        <i class="fa fa-plus fa-2x"></i>
+                                                                        <div class="filerequire">请上传小于 5M 的 .jpg,.png 文件</div>
+                                                                        <input type="file" class="hidden-fileinput" id="fileUpload" name="fileUpload"/>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="panel-documenttype7" class="panel box box-primary panel-documenttype7">
+                                                <div class="box-header with-border">
+                                                    <h4 class="box-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse7" class="collapsed pull-left">
+                                                            现场工人相关技术资格证复印件
+                                                            <small><span class="label label-default">必选</span></small>
+                                                        </a>
+                                                    </h4>
+                                                    <div class="pull-right">
+                                                        <span class="badge bg-gray badge-documentcount7" title="现场工人相关技术资格证复印件"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapse7" class="panel-collapse collapse" style="height: 0px;">
+                                                    <div class="box-body clearfix">
+                                                        <p class="margin-bottom h5">备注：如电工证、登高作业证等</p>
+                                                        <div class="row" id="group_7">
+                                                            <!-- 上传组件 -->
+                                                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                                                                <form action="${base}/user/uploadImage" class="form-upload" name="uploadImageForm7" id="uploadImageForm7" enctype="multipart/form-data" method="post">
+                                                                    <input type="hidden" name="Type" value="现场工人相关技术资格证复印件"/>
+                                                                    <input type="hidden" name="BoothId" id="boothIdValue7"/>
+                                                                    <input type="hidden" name="TempId" value="7"/>
+                                                                    <div class="document-item btn-adddocument" title="上传现场工人相关技术资格证复印件">
+                                                                        <i class="fa fa-plus fa-2x"></i>
+                                                                        <div class="filerequire">请上传小于 5M 的 .jpg,.png 文件</div>
+                                                                        <input type="file" class="hidden-fileinput" id="fileUpload" name="fileUpload"/>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 审核历史 -->
+                            <div class="tab-pane " id="tab_2">
+                                <div class="row margin-bottom">
+                                    <div class="col-md-6">
+                                        <h4 class="text-center" style="margin-bottom:15px;">添加审核结果</h4>
+                                        <form action="${base}/user/admin/audit/save" class="form-horizontal" id="formSaveAudit" method="post">
+                                            <input id="userId" name="userId" type="hidden" value="${tExpoBuildInfo.userid}"/>
+                                            <input id="fairId" name="fairId" type="hidden" value="${tFairInfo.id}"/>
+                                            <input id="boothNumber" name="boothNumber" type="hidden" value="${tExpoBuildInfo.booth_Number}"/>
+                                            <input id="fairName" name="fairName" type="hidden" value="${tFairInfo.fair_name}"/>
+                                            <input id="sendSmsMobilePhone" name="sendSmsMobilePhone" type="hidden" value="${tExpoXicecFair.mobilephone}"/>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">审核结果</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-control" data-val="true" data-val-required="Status 字段是必需的。" id="boothReviewStatus" name="boothReviewStatus">
+                                                        <option value="4">审核不通过</option>
+                                                        <option value="3">审核通过</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">审核信息</label>
+                                                <div class="col-sm-8">
+                                                    <textarea class="form-control" id="auditMsg" name="auditMsg" rows="8"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">审核短信</label>
+                                                <div class="col-md-8 checkbox">
+                                                    <label>
+                                                        <input id="sendAuditSMS" name="sendAuditSMS" type="checkbox" value="true" checked />
+                                                        发送审核短信
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-7 col-sm-offset-3">
+                                                    <p id="CreateBoothSummary" class="text-danger"></p>
+                                                    <button type="submit" class="btn btn-primary" id="btnSaveAuditInfo">保存审核信息</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-6" id="boothAuditHistory">
+                                        <ul class="timeline" style="margin-right:-15px;" id="booth_review_result" name="booth_review_result">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 关联展位 -->
+                            <div class="tab-pane " id="tab_3">
+                                <p><strong>展位号：</strong><#if tExpoBuildInfo?exists>${tExpoBuildInfo.booth_Number}</#if></p>
+                                <p><strong>展位类型：</strong>
+                                    <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 1>标摊</#if>
+                                    <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 2>特装</#if>
+                                </p>
+                                <form action="/Admin/BoothRegister/Checkout" id="boothreg-form" method="post">
+                                    <div class="form-group">
+                                        <label>参展单位：</label>
+                                        <input type="text" class="form-control" id="boothreg-company" name="Company" value="${tExpoBuildInfo.exhibitor_Company}"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>联系方式：</label>
+                                        <input type="text" class="form-control" id="boothreg-mobile" name="Mobile" value="${tExpoXicec.mobilephone}" />
+                                    </div>
+                                    <div id="boothreg-operate">
+                                        <table class="table table-condensed table-striped table-hover" id="boothreg-list">
+                                            <thead>
+                                            <tr>
+                                                <th style="width:1em;"></th>
+                                                <th style="width:1em;"></th>
+                                                <th>展位号</th>
+                                                <th>展位类型</th>
+                                                <th>展位面积</th>
+                                                <th>参展单位</th>
+                                                <th>联系方式</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                        <script type="text/template" id="template-boothreg">
+                                            <tr>
+                                                <td><input type="checkbox" {{CHECKED}} name="TargetId" value="{{REGID}}" /></td>
+                                                <td>{{CHECKEDICON}}</td>
+                                                <td><a href="/Admin/BoothRegister/Edit/{{REGID}}?ReturnUrl=http://boothaudit.xicec.com/Admin/Booth/Details/85bc8749-ef14-e711-9692-000c2985450b">{{NAME}}</a></td>
+                                                <td>{{TYPE}}</td>
+                                                <td>{{AREA}}</td>
+                                                <td>{{COMPANY}}</td>
+                                                <td>{{TEL}}</td>
+                                            </tr>
+                                        </script>
+                                        <p>匹配<code id="boothCount"></code>个展位，面积合计 <code id="totalArea"></code> ㎡</p>
+                                        <p><button type="button" class="btn btn-primary" id="btn-update-boothreg"><i class="fa fa-refresh"></i> 更新选中展位</button></p>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 展位信息 -->
+                            <div class="tab-pane " id="tab_4">
+                                <div class="well margin-bottom">
+                                    <dl>
+                                        <#if tExpoBuildInfo?exists>
+                                            <dt>展位号</dt>
+                                            <dd>${tExpoBuildInfo.booth_Number}</dd>
+                                            <dt>参展单位</dt>
+                                            <dd>${tExpoBuildInfo.exhibitor_Company}</dd>
+                                            <dt>展位类型</dt>
+                                            <dd>
+                                                <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 1>标摊</#if>
+                                                <#if tExpoBuildInfo.exhibitor_Type?exists && tExpoBuildInfo.exhibitor_Type== 2>特装</#if>
+                                            </dd>
+                                            <dt>展位面积</dt>
+                                            <dd>${tExpoBuildInfo.booth_area}</dd>
+                                            <dt>审核状态</dt>
+                                            <dd>
+                                                <#if tExpoBuildInfo.current_Audit_Status?exists && tExpoBuildInfo.current_Audit_Status== 1>上传资料</#if>
+                                                <#if tExpoBuildInfo.current_Audit_Status?exists && tExpoBuildInfo.current_Audit_Status== 2>提交审核</#if>
+                                                <#if tExpoBuildInfo.current_Audit_Status?exists && tExpoBuildInfo.current_Audit_Status== 3>审核通过</#if>
+                                                <#if tExpoBuildInfo.current_Audit_Status?exists && tExpoBuildInfo.current_Audit_Status== 4>审核不通过</#if>
+                                            </dd>
+                                            <dt>展位联系人</dt>
+                                            <dd>${tExpoXicecFair.username}</dd>
+                                            <dt>展位联系电话</dt>
+                                            <dd>${tExpoXicecFair.mobilephone}</dd>
+                                        </#if>
+                                    </dl>
+                                    <a class="btn btn-primary" href="${base}/user/admin/fair/booth/edit?boothid=${tExpoBuildInfo.id}&telphone=${tExpoXicecFair.mobilephone}&fairid=${tFairInfo.id}">修改展位信息</a>
+                                </div>
+                            </div>
+
+                            <!-- 客户资料 -->
+                            <div class="tab-pane " id="tab_5">
+                                <div class="well margin-bottom">
+                                    <dl>
+                                        <dt>姓名</dt>
+                                        <dd><#if tExpoXicecFair.username?exists>${tExpoXicecFair.username}</#if></dd>
+                                        <dt>电话</dt>
+                                        <dd><#if tExpoXicecFair.mobilephone?exists>${tExpoXicecFair.mobilephone}</#if></dd>
+                                        <dt>邮箱</dt>
+                                        <dd><#if tExpoXicecFair.email?exists>${tExpoXicecFair.email}</#if></dd>
+                                        <dt>单位</dt>
+                                        <dd><#if tExpoXicecFair.company?exists>${tExpoXicecFair.company}</#if></dd>
+                                        <dt>评级</dt>
+                                        <dd><#if tExpoXicecFair.vip?exists>${tExpoXicecFair.vip}</#if></dd>
+                                    </dl>
+                                    <a href="${base}/user/admin/fair/booth/listhead?telphone=${tExpoXicecFair.mobilephone}&fairid=${tFairInfo.id}" class="btn btn-default"><i class="fa fa-link"></i> 相关展位</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--删除展位-->
+            <div class="modal modal-danger fade" id="modalDeleteAudit">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">删除审核信息</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>删除审核信息不会改变此展位的审核状态！</p>
+                            <p>确定删除审核信息？</p>
+                        </div>
+                        <div class="modal-footer">
+                            <input value="" name="AuditId" id="deleteAuditId" type="hidden">
+                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-outline" id="btnDeleteAudit">确定删除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<!-- 预览 -->
+<div class="modal fade" id="modalPreview">
+    <div class="modal-dialog modal-dialog-preview">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div class="modal-body"><img id="imgPreview" src="" style="width:100%"/></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 图片模板 -->
+<script type="text/template" id="template_loading">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 loading-template">
+        <div class="document-item">
+            <div class="document-thumb"></div>
+            <div class="document-control text-center">请稍后</div>
+            <button class="btn btn-default btn-xs btn-delete-document deleteHide" data-imagename="" data-tempid="" data-boothid="">
+                <i class="fa fa-trash fa-2x"></i>
+            </button>
+            <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        /*$('.form-upload').parent().remove();
+        $('.btn-toggle-history').click(function () {
+            $(this).hide().parents('ul').find('.audithistory').show();
+        });*/
+
+        $('.btn-delete-document').remove();
+        //$('.form-upload').parent().remove();
+
+        //初始化对应的数据
+        loadImageByCurrentBoothIdAndTempId(7);
+        loadImageByCurrentBoothIdAndTempId(6);
+        loadImageByCurrentBoothIdAndTempId(5);
+        loadImageByCurrentBoothIdAndTempId(4);
+        loadImageByCurrentBoothIdAndTempId(3);
+        loadImageByCurrentBoothIdAndTempId(2);
+        loadImageByCurrentBoothIdAndTempId(1);
+
+        //根据当前展位和图片类别显示对应图片
+        function loadImageByCurrentBoothIdAndTempId(tempid) {
+            var formIndex = 7 - tempid;
+            $('.btn-delete-document').parents('.document-item').parent().remove();
+
+            $.ajax({
+                url: '${base}/user/loadImageByCurrentBoothIdAndTempId',
+                data: { boothid: '${tExpoBuildInfo.booth_Number}', tempid:tempid, mobilephone: '${tExpoXicecFair.mobilephone}'},
+                type: 'post',
+                success: function (data) {
+                    if(data.resultCode == 0){
+                        var boothImageList = JSON.parse(data.boothImageInfoArrayListReslut);
+                        if (boothImageList != null && boothImageList.length > 0) {
+                            var div = document.getElementById('panel-documenttype'+tempid);
+                            div.setAttribute("class", "panel box panel-documenttype" + tempid + " box-danger");
+                            for (var i = 0, imageInfo; imageInfo = boothImageList[i++];) {
+                                var loadingHtml = $('#template_loading').html();
+                                $('.hidden-fileinput').parents('form').eq(formIndex).parent().before(loadingHtml);
+                                var target = $('#group_' + imageInfo.tempid).find('.loading-template').eq(0);
+                                target.find('.btn-delete-document').remove();
+                                var content = target.find('.document-thumb');
+                                if (imageInfo.preview) {
+                                    content.css('background-image', 'url(${base}/user/loadImgByImageType?tempid=' + imageInfo.tempid
+                                        + '&imagename=' + encodeURI(imageInfo.fileName) + '&boothid=' + imageInfo.curBoothid + '&mobilephone=' + ${tExpoXicecFair.mobilephone} + ')').click(function () {
+                                        var imageSrc = $(this).css('backgroundImage');
+                                        var reg = /\"(.*?)\"/g;
+                                        var imageSrcValue = reg.exec(imageSrc);
+                                        showImagePreview(imageSrcValue[1]);
+                                    });
+                                }
+                                else {
+                                    content.append('<a class="document-noimage-icon" href="' + data.description + '"><i class="fa fa-3x fa-file-image-o"></i></a>');
+                                }
+                                content.siblings('.document-control').text(imageInfo.modifyDate).removeClass('text-center');
+                                content.siblings('.btn-delete-document').attr("data-tempid", tempid);
+                                content.siblings('.btn-delete-document').attr("data-boothid", '${tExpoBuildInfo.booth_Number}');
+                                content.siblings('.btn-delete-document').attr("data-imagename", imageInfo.fileName).bind('click', function () {
+                                    deleteImage($(this));
+                                });
+                                //3：表示审核通过，则不让其删掉对应的文件
+                                if (3 != imageInfo.curReviewStatus) {
+                                    $('.deleteHide>.fa-trash').show();
+                                } else {
+                                    //$('.deleteHide>.fa-trash').hide();
+                                    target.find('.btn-delete-document').remove();
+                                }
+                                target.find('.fa-circle-o-notch').remove();
+                                updateDocumentCount(imageInfo.tempid);
+                                target.removeClass('loading-template');
+                            }
+                        }
+                        if(1 == tempid) {
+                            $('.hidden-fileinput').parent().remove();
+                        }
+                    }
+                }
+            });
+        }
+
+        // 显示图片预览
+        function showImagePreview(src) {
+            $('#modalPreview').modal('show');
+            $('#imgPreview').attr('src', src);
+        }
+
+        // 删除文件
+        function deleteImage(e) {
+            if (confirm("确定删除此文件？")) {
+                var imageName = e.data('imagename');
+                var tempid = e.data('tempid');
+                var boothid = e.data('boothid');
+                console.log('确定删除' + imageName);
+                $.ajax({
+                    url: '${base}/user/deleteImgByImageType',
+                    data: { tempid: tempid, imagename:imageName, boothid:boothid },
+                    type: 'post',
+                    success: function (data) {
+                        if (data.resultCode == 0) {
+                            updateBoothStatus($(e));
+                            e.parents('.document-item').parent().fadeOut(200, function () {
+                                $(this).remove();
+                                updateDocumentCount(tempid);
+                            });
+                        }
+                        else {
+                            alert(data.description);
+                        }
+                    }
+                });
+            }
+        }
+
+        function markupNewDocuments() {
+            var lastaudit = parseInt('636265528873130000');
+            $('.doc-createtime').each(function () {
+                var doccreatetime = $(this).val();
+                if (doccreatetime > lastaudit) {
+                    console.log(doccreatetime + ' - ' + lastaudit);
+                    $(this).siblings('.document-control')
+                        .append(' <span class="label label-danger">新</span>')
+                        .parents('.box').removeClass('box-primary').addClass('box-danger')
+                }
+            })
+        }
+        markupNewDocuments();
+
+        function updateDocumentCount(tempid) {
+            $('.panel-documenttype' + tempid).each(function () {
+                var count = $(this).find('.document-thumb').length;
+                if (count > 0) {
+                    $(this).find('.badge-documentcount' + tempid).text(count);
+                }
+                else {
+                    $(this).find('.badge-documentcount' + tempid).empty();
+                }
+            });
+        }
+        //updateDocumentCount();
+
+        // 预览
+        $('.btnpreview').click(function () {
+            var src = $(this).data('src');
+            $('#imgPreview').attr('src', src);
+            $('#modalPreview').modal('show');
+        });
+
+        loadBoothRegList();
+
+        function checkoutBoothReg() {;
+            $('#btn-update-boothreg').addClass('disabled');
+            var data = $('#boothreg-form').serialize();
+            $.ajax({
+                url: '${base}/user/admin/booth/register',
+                type: 'POST',
+                data: { userid:${tExpoXicecFair.id}, fairid:${tFairInfo.id}, boothNum:'${tExpoBuildInfo.booth_Number}'},
+                complete: function () {
+                    loadBoothRegList();
+                    $('#btn-update-boothreg').one('click', function () {
+                        checkoutBoothReg();
+                    }).removeClass('disabled');
+                }
+            })
+        }
+        $('#btn-update-boothreg').one('click',function () {
+            checkoutBoothReg();
+        });
+
+        //加载对应展位的审核信息
+        $.ajax({
+            url: "${base}/user/admin/getBoothByFairIdAndBoothNum",
+            type: "post",
+            dataType: "json",
+            data: { userid:${tExpoXicecFair.id}, fairid:${tFairInfo.id}, boothNum:'${tExpoBuildInfo.booth_Number}'},
+            success: function (e) {
+                if(e.boothReviewInfoList != null){
+                    var expoBuildInfoList = JSON.parse(e.boothReviewInfoList);
+                    loadCurrentReivewInfo(expoBuildInfoList);
+                }
+            }
+        });
+
+        function setBoothReviewSelect(status){
+            jsSelectItemByValue(document.getElementById("boothReviewStatus"), status);
+        }
+
+        function jsSelectItemByValue(objSelect,objItemText) {
+            for(var i=0;i<objSelect.options.length;i++) {
+                if(objSelect.options[i].value == objItemText) {
+                    objSelect.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+
+        function loadCurrentReivewInfo(curReviewInfo){
+            //当前状态对应的审核结果
+            var reviewReultInfoUl = document.getElementById("booth_review_result");
+            reviewReultInfoUl.innerHTML = "";
+            var reviewli = document.createElement("li");
+            reviewli.setAttribute("class", "time-label");
+            reviewli.innerHTML = "<span class='bg-tangjiuhui' style='font-size:1.2em;font-weight:normal;'>审核信息</span>";
+            reviewReultInfoUl.appendChild(reviewli);
+
+            if(curReviewInfo != null && curReviewInfo.length > 0){
+                for(var index=0,reviewInfo; reviewInfo=curReviewInfo[index++];){
+                    setBoothReviewSelect(reviewInfo.reviewStatus);
+                    var header = reviewInfo.review_header;
+                    var content = reviewInfo.review_content;
+                    var time = reviewInfo.review_time;
+                    if(index == 1){
+                        reviewli = document.createElement("li");
+                        reviewli.setAttribute("class", "");
+                        reviewli.setAttribute("data-aid", reviewInfo.id);
+                        if(content != null && content != ""){
+                            reviewli.innerHTML = "<i class='fa fa-remove bg-red'></i><div class='timeline-item'><h3 class='timeline-header'>" + header + "</h3><div class='timeline-body'>" + content + "<div class='timeline-footer text-right'><span class='time'><i class='fa fa-clock-o'></i>" + time + "</span></div></div>";
+                        }else{
+                            reviewli.innerHTML = "<i class='fa fa-check bg-green'></i><div class='timeline-item'><h3 class='timeline-header'>" + header + "</h3><div class='timeline-footer text-right'><span class='time'><i class='fa fa-clock-o'></i>" + time + "</span></div></div>";
+                        }
+                        reviewReultInfoUl.appendChild(reviewli);
+                    }else{
+                        reviewli = document.createElement("li");
+                        reviewli.setAttribute("class", "audithistory");
+                        reviewli.setAttribute("data-aid", reviewInfo.id);
+                        if(content != null && content != ""){
+                            reviewli.innerHTML = "<i class='fa fa-remove bg-red'></i><div class='timeline-item'><h3 class='timeline-header'>" + header + "</h3><div class='timeline-body'>" + content + "<div class='timeline-footer text-right'><span class='time'><i class='fa fa-clock-o'></i>" + time + "</span></div></div>";
+                        }else{
+                            reviewli.innerHTML = "<i class='fa fa-check bg-green'></i><div class='timeline-item'><h3 class='timeline-header'>" + header + "</h3><div class='timeline-footer text-right'><span class='time'><i class='fa fa-clock-o'></i>" + time + "</span></div></div>";
+                        }
+                        reviewReultInfoUl.appendChild(reviewli);
+                    }
+                }
+                if(curReviewInfo != null && curReviewInfo.length > 1){
+                    reviewli = document.createElement("li");
+                    reviewli.setAttribute("class", "time-label");
+                    reviewli.innerHTML = "<span class='bg-gray btn-toggle-history' id = 'toggle-history-btn' name = 'toggle-history-btn' style='font-weight: normal;'>查看历史审核信息</span>";
+                    reviewReultInfoUl.appendChild(reviewli);
+
+                    var toggleHistoryBtn = document.getElementById("toggle-history-btn");
+                    toggleHistoryBtn.onclick = function () {
+                        $(this).hide().parents('ul').find('.audithistory').slideDown();
+                    };
+                }
+            }else{
+                reviewli = document.createElement("li");
+                reviewli.innerHTML = "<i class='fa fa-info bg-gray'></i><div class='timeline-item'><h3 class='timeline-header'>暂无审核信息</h3></div>";
+                reviewReultInfoUl.appendChild(reviewli);
+            }
+
+            reviewli = document.createElement("li");
+            reviewli.innerHTML = "<i class='fa fa-history'></i>";
+            reviewReultInfoUl.appendChild(reviewli);
+
+            $('.timeline-header').append('<button class="btn btn-danger btn-xs pull-right btn-deleteaudit" data-toggle="modal" data-target="#modalDeleteAudit"><i class="fa fa-trash-o"></i></button>');
+            $('.btn-deleteaudit').click(function () {
+                var aid = $(this).parents('li').data('aid');
+                $('#deleteAuditId').val(aid);
+            });
+        }
+
+        $('#btnDeleteAudit').click(function () {
+            var aid = $('#deleteAuditId').val();
+            $('#modalDeleteAudit').modal('hide');
+            $.ajax({
+                url: '${base}/user/admin/audit/delete',
+                type: "POST",
+                data: { xicecReviewId: aid },
+                success: function (data) {
+                    if (data.resultCode == 0) {
+                        $('#boothAuditHistory [data-aid="' + aid + '"]').slideUp(400, function () {
+                            $(this).remove();
+                        });
+                    }
+                }
+            })
+        });
+    });
+
+    function loadBoothRegList() {
+        $('#boothreg-operate').hide();
+        $.ajax({
+            url: '${base}/user/admin/booth/register',
+            data: { userid:${tExpoXicecFair.id}, fairid:${tFairInfo.id}, boothNum:'${tExpoBuildInfo.booth_Number}'},
+            type: 'post',
+            success: function (data) {
+                var boothRegisterList = JSON.parse(data.boothRegisterListInfo);
+                if (boothRegisterList != null && boothRegisterList.length > 0) {
+                    var template = $('#template-boothreg').html();
+                    var html = '';
+                    for (var i = 0, boothRegister; boothRegister = boothRegisterList[i++];) {
+                        html += template
+                            .replace(/\{{CHECKEDICON}}/g, boothRegister.current_Audit_Status == 3 ? '<i class="fa fa-check-circle text-primary"></i>' : '<i class="fa fa-circle-thin text-gray"></i>')
+                            .replace(/\{{CHECKED}}/g, boothRegister.current_Audit_Status == 3 ? '' : 'checked')
+                            .replace(/\{{NAME}}/g, boothRegister.booth_Number)
+                            .replace(/\{{TYPE}}/g, boothRegister.exhibitor_Type == 2 ? '特装':'标摊')
+                            .replace(/\{{AREA}}/g, boothRegister.booth_area)
+                            .replace(/\{{COMPANY}}/g, boothRegister.exhibitor_Company)
+                            .replace(/\{{TEL}}/g, ${tExpoXicec.mobilephone});
+                    }
+                    $('#boothreg-operate').show().find('tbody').html(html);
+                    $('#boothCount').text(data.matchValue);
+                    $('#totalArea').text(data.totalArea);
+                }
+            }
+        });
+    }
+
+    //保存审核信息
+    $('#btnSaveAuditInfo').click(function (){
+        $("#formSaveAudit").submit();
+        /*$.ajax({
+            type: "POST",
+            data: {
+                "userId" : ${tExpoBuildInfo.userid},
+                "fairId": ${tFairInfo.id},
+                "boothNumber": ${tExpoBuildInfo.booth_Number},
+                "sendAuditSMS": $("input[type='checkbox']").is(':checked'),
+                "fairName": '${tFairInfo.fair_name}',
+                "sendSmsMobilePhone": ${tExpoXicecFair.mobilephone},
+                "boothReviewStatus": $('#boothReviewStatus option:selected').val(),
+                "auditMsg": $("#auditMsg").val()},
+            url: "${base}/user/admin/audit/save",
+            dataType: "json",
+            success: function (result) {
+                $("#bg,.loading").hide();
+                $("#registerBtn").removeClass("disabled");
+                if (result.resultCode == 0) {
+                    //window.location.replace("registerInfo_unuse.html?phone=" + $("#mobilephone").val() + "&fairtype="+fair_type_value);
+                    window.location.replace("../../registerInfoCode?phone=" + $("#mobilephone").val());
+                }else{
+                    document.getElementById('mobilecode').value = "";
+                    alert("输入的验证码错误，请重新输入！");
+                }
+            }
+        });*/
+    });
+</script>
+</body>
+</html>

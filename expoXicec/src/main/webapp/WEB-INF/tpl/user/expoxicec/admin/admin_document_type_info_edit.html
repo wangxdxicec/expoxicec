@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>中国·厦门会展金泓信展览</title>
+</head>
+
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    <#include "/user/expoxicec/admin/admin_head.html" />
+    <#include "/common/message.ftl" />
+    <aside class="main-sidebar">
+        <#include "/user/expoxicec/admin/section_content.html" />
+    </aside>
+    <div class="content-wrapper" style="overflow:visible;" >
+        <section class="content-header">
+            <h1>${tFairInfo.fair_name}<small>${tExhibitionType.exhibition_type_name}</small></h1>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-primary">
+                        <div class="box-header"><div class="box-title">文档信息</div></div>
+                        <div class="box-body">
+                            <form action="${base}/user/admin/document/type/save" class="form-horizontal" method="post">
+                                <div class="box-body">
+                                    <input data-val="true" data-val-number="字段 documentInfoTypeId 必须是一个数字。" data-val-required="documentInfoTypeId 字段是必需的。" id="documentInfoTypeId" name="documentInfoTypeId" type="hidden" value="${tDocumentInfo.id}" />
+                                    <input data-val="true" data-val-number="字段 documentFairId 必须是一个数字。" data-val-required="documentFairId 字段是必需的。" id="documentFairId" name="documentFairId" type="hidden" value="${tDocumentInfo.document_Fair}" />
+                                    <input data-val="true" data-val-number="字段 documentTypeId 必须是一个数字。" data-val-required="documentTypeId 字段是必需的。" id="documentTypeId" name="documentTypeId" type="hidden" value="${tDocumentInfo.document_Type_Id}" />
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label">文档名称</label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="documentName" name="documentName" type="text" value="${tDocumentInfo.document_Name}" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">模版</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-flat" type="button" data-toggle="modal" data-target="#modalUploadTemplate">上传</button>
+                                            </span>
+                                            <#if tDocumentInfo.document_Template?exists>
+                                                <input class="form-control" id="documentTemplate" name="documentTemplate" type="text" value="${tDocumentInfo.document_Template}" />
+                                            <#else>
+                                                <input class="form-control" id="documentTemplate" name="documentTemplate" type="text" value="" />
+                                            </#if>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">排序</label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" data-val="true" data-val-number="字段 documentSort 必须是一个数字。" data-val-required="documentSort 字段是必需的。" id="documentSort" name="documentSort" type="text" value="${tDocumentInfo.document_Sort}" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">文档大小</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <input class="form-control" data-val="true" data-val-number="字段 documentSize 必须是一个数字。" data-val-required="documentSize 字段是必需的。" id="documentSize" name="documentSize" type="text" value="${tDocumentInfo.document_Size}" />
+                                            <div class="input-group-addon">MB</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">文档类型</label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="documentType" name="documentType" type="text" value="${tDocumentInfo.document_Type}" />
+                                        <p class="text-muted">多个类型用<strong>英文逗号</strong>分隔（如 .jpg,.png），使用默认图片类型此项可不填</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">备注</label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="documentRemark" name="documentRemark" type="text" value="${tDocumentInfo.document_Remark}" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <div class="checkbox">
+                                            <label>
+                                                <#if tDocumentInfo.document_Require?exists && 1==tDocumentInfo.document_Require>
+                                                    <input checked="checked" data-val="true" data-val-required="documentRequeired 字段是必需的。" id="documentRequeired" name="documentRequeired" type="checkbox" value="true" />
+                                                <#else>
+                                                    <input data-val="true" data-val-required="documentRequeired 字段是必需的。" id="documentRequeired" name="documentRequeired" type="checkbox" value="true" />
+                                                </#if>必选
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8 text-danger">
+                                        <div class="validation-summary-valid" data-valmsg-summary="true">
+                                            <ul><li style="display:none"></li></ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <button type="submit" class="btn btn-primary">保存</button>
+                                        <a class="btn btn-default" onclick="history.go(-1)">取消</a>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalUploadTemplate">
+                <script type="text/javascript" src="${base}/resource/ajaxfileupload.js"></script>
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title">上传模版</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="${base}/user/admin/document/type/upload/template" class="form-horizontal" enctype="multipart/form-data" id="formInportBooth" method="post">                    <div class="form-group">
+                                <label class="col-sm-3 control-label">选择文件</label>
+                                <div class="col-sm-7">
+                                    <input type="file" class="form-control" name="fileTemplate" id="fileTemplate" />
+                                    <input data-val="true" id="documentInfoId" name="documentInfoId" type="hidden" value="${tDocumentInfo.id}" />
+                                    <input data-val="true" id="exhibitionTypeId" name="exhibitionTypeId" type="hidden" value="${tExhibitionType.id}" />
+                                    <input data-val="true" id="fairId" name="fairId" type="hidden" value="${tFairInfo.id}" />
+                                </div>
+                            </div>
+                                <div class="form-group" style="margin-top:20px;margin-bottom:40px">
+                                    <div class="col-sm-7 col-sm-offset-3">
+                                        <p id="CreateBoothSummary" class="text-danger"></p>
+                                        <button type="button" class="btn btn-primary" id="uploadDocumentTypeTemplateBtn">上传</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0
+            </div>
+            <strong>Copyright &copy; 2017 <a href="http://www.xicec.com">XICEC_JHX</a>.</strong> 版权所有
+        </div>
+    </footer>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#uploadDocumentTypeTemplateBtn').click(function (){
+            var fileTemplate = document.getElementById("fileTemplate").value;
+            $.ajaxFileUpload({
+                url:'../../../admin/document/type/upload/template',
+                dataType: 'text/html',
+                fileElementId:'fileTemplate',
+                success: function (data){
+                    $('#modalUploadTemplate').modal('hide');
+                    document.getElementById("documentTemplate").value = data.substring(1,data.length-1);
+                },
+                error: function (data){
+                    $.messager.alert('错误', data);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
